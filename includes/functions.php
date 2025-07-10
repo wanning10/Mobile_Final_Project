@@ -94,6 +94,36 @@ function getCategoryById($conn, $categoryId) {
     }
 }
 
+function createCategory($conn, $name, $description = '', $image = '', $icon = 'fas fa-coffee') {
+    try {
+        $stmt = $conn->prepare("INSERT INTO categories (name, description, image, icon) VALUES (?, ?, ?, ?)");
+        return $stmt->execute([$name, $description, $image, $icon]);
+    } catch(PDOException $e) {
+        return false;
+    }
+}
+
+function updateCategory($conn, $categoryId, $name, $description = '', $image = '', $icon = 'fas fa-coffee') {
+    try {
+        $stmt = $conn->prepare("UPDATE categories SET name = ?, description = ?, image = ?, icon = ? WHERE id = ?");
+        return $stmt->execute([$name, $description, $image, $icon, $categoryId]);
+    } catch(PDOException $e) {
+        return false;
+    }
+}
+
+function searchCategories($conn, $keyword) {
+    try {
+        $stmt = $conn->prepare("SELECT * FROM categories WHERE name LIKE ? OR description LIKE ? ORDER BY name");
+        $like = "%" . $keyword . "%";
+        $stmt->execute([$like, $like]);
+        return $stmt->fetchAll();
+    } catch(PDOException $e) {
+        return [];
+    }
+}
+
+
 // Product Functions
 function getProducts($conn, $categoryId = null, $search = null, $limit = null) {
     try {
@@ -147,6 +177,65 @@ function getProductById($conn, $productId) {
                                WHERE p.id = ?");
         $stmt->execute([$productId]);
         return $stmt->fetch();
+    } catch(PDOException $e) {
+        return false;
+    }
+}
+
+
+function createProduct($conn, $data) {
+    try {
+        $stmt = $conn->prepare("INSERT INTO products (name, description, price, category_id, image_url, stock_quantity, is_available, is_featured)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([
+            $data['name'],
+            $data['description'],
+            $data['price'],
+            $data['category_id'],
+            $data['image_url'],
+            $data['stock_quantity'],
+            $data['is_available'],
+            $data['is_featured']
+        ]);
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function updateProduct($conn, $id, $data) {
+    try {
+        $stmt = $conn->prepare("UPDATE products SET name=?, description=?, price=?, category_id=?, image_url=?, stock_quantity=?, is_available=?, is_featured=?
+                                WHERE id = ?");
+        return $stmt->execute([
+            $data['name'],
+            $data['description'],
+            $data['price'],
+            $data['category_id'],
+            $data['image_url'],
+            $data['stock_quantity'],
+            $data['is_available'],
+            $data['is_featured'],
+            $id
+        ]);
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function deleteProduct($conn, $id) {
+    try {
+        $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
+        return $stmt->execute([$id]);
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+
+function toggleProductAvailability($conn, $productId, $status) {
+    try {
+        $stmt = $conn->prepare("UPDATE products SET is_available = ? WHERE id = ?");
+        return $stmt->execute([$status, $productId]);
     } catch(PDOException $e) {
         return false;
     }
