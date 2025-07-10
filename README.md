@@ -1,10 +1,10 @@
 # MobileApplicationFinalProject
 
-Course Code: SWE311
-Course Name: Mobile Applications System Design
-Lecturer: Nurul Amera binti Muhamad Nazmi
-Academic Session: 2025/04
-Assessment Title: Final Project
+Course Code: SWE311 <br/>
+Course Name: Mobile Applications System Design <br/>
+Lecturer: Nurul Amera binti Muhamad Nazmi <br/>
+Academic Session: 2025/04 <br/>
+Assessment Title: Final Project <br/>
 
 Group Members:
 1. SWE2209110 Chin Kok Fei
