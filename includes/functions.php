@@ -123,6 +123,15 @@ function searchCategories($conn, $keyword) {
     }
 }
 
+function deleteCategory($conn, $categoryId) {
+    try {
+        $stmt = $conn->prepare("DELETE FROM categories WHERE id = ?");
+        return $stmt->execute([$categoryId]);
+    } catch(PDOException $e) {
+        return false;
+    }
+}
+
 
 // Product Functions
 function getProducts($conn, $categoryId = null, $search = null, $limit = null) {

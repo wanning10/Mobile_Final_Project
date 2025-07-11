@@ -1,6 +1,24 @@
 // Main JavaScript for Cozy Beverage Web App
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Modal logic for Add Product
+    const showBtn = document.getElementById('show-add-product');
+    const modal = document.getElementById('addProductModal');
+    const closeBtn = document.getElementById('closeAddProduct');
+    if (showBtn && modal && closeBtn) {
+        showBtn.addEventListener('click', function() {
+            modal.style.display = 'flex';
+        });
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
     // Mobile Navigation Toggle
     const navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
