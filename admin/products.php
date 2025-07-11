@@ -240,11 +240,13 @@ if (isset($_GET['edit'])) {
                 <table style="width:100%; border-collapse:separate; border-spacing:0 0.5em;">
                     <thead>
                         <tr>
-  
+                            <!-- Left side fields -->
+
                             <th style="background:#f8f8f8;">Name</th>
                             <th style="background:#f8f8f8;">Category</th>
                             <th style="background:#f8f8f8;">Price</th>
                             <th style="background:#f8f8f8;">Stock</th>
+                            <!-- Right side fields -->
                             <th style="background:#f0f0f0;">Available</th>
                             <th style="background:#f0f0f0;">Featured</th>
                             <th style="background:#f0f0f0;">Image</th>
@@ -255,10 +257,13 @@ if (isset($_GET['edit'])) {
                     <tbody>
                         <?php foreach ($products as $product): ?>
                             <tr>
+                                <!-- Left side fields -->
+                                <!-- <td><?php echo $product['id']; ?></td> -->
                                 <td><?php echo htmlspecialchars($product['name']); ?></td>
                                 <td><?php echo htmlspecialchars($product['category_name']); ?></td>
                                 <td><?php echo number_format($product['price'], 2); ?></td>
                                 <td><?php echo (int)$product['stock_quantity']; ?></td>
+                                <!-- Right side fields -->
                                 <td><?php echo $product['is_available'] ? 'Yes' : 'No'; ?></td>
                                 <td><?php echo $product['is_featured'] ? 'Yes' : 'No'; ?></td>
                                 <td><?php if ($product['image_url']): ?><img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/><?php endif; ?></td>
