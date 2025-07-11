@@ -19,6 +19,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Modal logic for Add Category
+    const showCatBtn = document.getElementById('show-add-category');
+    const catModal = document.getElementById('addCategoryModal');
+    const closeCatBtn = document.getElementById('closeAddCategory');
+    if (showCatBtn && catModal && closeCatBtn) {
+        showCatBtn.addEventListener('click', function() {
+            catModal.style.display = 'flex';
+        });
+        closeCatBtn.addEventListener('click', function() {
+            catModal.style.display = 'none';
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === catModal) {
+                catModal.style.display = 'none';
+            }
+        });
+    }
+
     // Mobile Navigation Toggle
     const navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
