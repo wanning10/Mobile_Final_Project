@@ -343,5 +343,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
     });
     </script>
 
+    
+
 </body>
 </html> 
