@@ -12,7 +12,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Location - Cozy Beverage</title>
+    <title>Location - CATFE</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -23,56 +23,73 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="index.php">
-                    <i class="fas fa-coffee"></i>
-                    <span>Cozy Beverage</span>
+                    <img src="assets/images/logo.png" alt="Logo" style="height:30px;">
+                    <span>CATFE</span>
                 </a>
             </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="index.php" class="nav-link">Home</a>
-                <a href="products.php" class="nav-link">Products</a>
+
+            <!-- Centered menu links -->
+            <div class="nav-center-menu">
+                <a href="index.php" class="nav-link">HOME</a>
+                <a href="about.php" class="nav-link">ABOUT</a>
+                <a href="products.php" class="nav-link">PRODUCTS</a>
+                <a href="map.php" class="nav-link active">MAP</a>
+            </div>
+
+            <!-- Right icons (cart & profile) -->
+            <div class="nav-right-icons">
                 <a href="cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
-                    Cart
                     <?php if(isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
                         <span class="cart-badge"><?php echo $_SESSION['cart_count']; ?></span>
                     <?php endif; ?>
                 </a>
-                <a href="map.php" class="nav-link active">Map</a>
-                <a href="about.php" class="nav-link">About</a>
-                <?php if($isLoggedIn): ?>
-                    <a href="profile.php" class="nav-link">Profile</a>
-                    <?php if($isAdmin): ?>
-                        <a href="admin/" class="nav-link">Admin</a>
-                    <?php endif; ?>
-                    <a href="logout.php" class="nav-link">Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="nav-link">Login</a>
-                    <a href="register.php" class="nav-link">Register</a>
+                <div class="profile-dropdown">
+                    <a href="#" class="nav-link" id="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-content" id="profile-dropdown">
+                        <a href="profile.php">My Profile</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+                <?php if($isAdmin): ?>
+                    <a href="admin/" class="nav-link">ADMIN</a>
                 <?php endif; ?>
             </div>
+
             <div class="nav-toggle" id="nav-toggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
         </div>
-
     </nav>
 
     <!-- Map Section -->
     <section class="map-section">
         <div class="container">
-            <h2><i class="fas fa-map-marker-alt"></i> Find Us</h2>
+            <!-- <h2><i class="fas fa-map-marker-alt"></i> Find Us</h2> -->
+            <!-- Map Title -->
+            <h2 class="map-title">
+                Store Locator
+            </h2>
+            <!-- Map Description -->
+            <p class="map-description">
+                Check the map below to visit us and make your day purrfect.
+            </p>
             
             <div class="location-info">
-            <div class="shop-details">
-                <h3>Cozy Beverage Shop</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Jalan Sunsuria, Bandar Sunsuria, 43900 Sepang, Selangor</p>
-                <p><i class="fas fa-phone"></i> (555) 123-4567</p>
-                <p><i class="fas fa-envelope"></i> info@cozybeverage.com</p>
-                <p><i class="fas fa-clock"></i> Open Daily: 7:00 AM - 9:00 PM</p>
-            </div>
-                
+            <div class="shop-card">
+                <div class="shop-details">
+                    <img src="assets/images/logo.png" alt="Catfe Logo" class="shop-logo">
+                    <h3>CATFE</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Jalan Sunsuria, Bandar Sunsuria, 43900 Sepang, Selangor</p>
+                    <p><i class="fas fa-phone"></i> 60123456789</p>
+                    <p><i class="fas fa-envelope"></i> catfe@example.com</p>
+                    <p><i class="fas fa-clock"></i> Open Daily: 7AM - 9PM</p>
+                </div>
+
                 <div class="map-controls">
                     <button id="get-location" class="btn btn-primary">
                         <i class="fas fa-location-arrow"></i> Get My Location
@@ -82,9 +99,10 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
                     </button>
                 </div>
             </div>
-            
+
             <div class="map-container">
                 <div id="map" style="height: 500px; width: 100%;"></div>
+            </div>
             </div>
             
             <div class="location-features">
@@ -116,26 +134,34 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Cozy Beverage</h3>
-                    <p>Your perfect companion for a relaxing beverage experience.</p>
+                <div class="footer-section" style="padding-right: 3em;">
+                    <!-- <h3>CATFE</h3> -->
+                     <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <img src="assets/images/logo.png" alt="Logo" style="height: 30px;">
+                        CATFE
+                    </h3>
+                    <p>Sip, unwind, and enjoy the gentle company of cats.
+                        Catfe brings comfort, quality coffee, and calm all in one cozy space.</p>
                 </div>
-                <div class="footer-section">
+                <div class="footer-section" style="padding-left: 5em;">
                     <h4>Quick Links</h4>
                     <ul>
+                        <li><a href="index.php">Home</a></li>
                         <li><a href="products.php">Products</a></li>
                         <li><a href="about.php">About</a></li>
-                        <li><a href="map.php">Location</a></li>
+                        <li><a href="map.php">Map</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Contact</h4>
-                    <p>Email: info@cozybeverage.com</p>
-                    <p>Phone: (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> Jalan Sunsuria, Bandar Sunsuria, 43900 Sepang, Selangor</p>
+                    <p><i class="fas fa-phone" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> 60123456789</p>
+                    <p><i class="fas fa-envelope" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> catfe@example.com</p>
+                    <p><i class="fas fa-clock" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> Open Daily: 7AM - 9PM</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Cozy Beverage. All rights reserved.</p>
+                <p>&copy; 2025 Catfe. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -152,7 +178,18 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         const shopLocation = [2.8268, 101.6682];
 
         // Initialize map centered at shop location
-        const map = L.map('map').setView(shopLocation, 17);
+        // const map = L.map('map').setView(shopLocation, 17);
+
+        const map = L.map('map', {
+            center: shopLocation,
+            zoom: 17,
+            zoomControl: false // disable default
+        });
+
+        // Add zoom control to bottom right
+        L.control.zoom({
+            position: 'bottomright' // or 'topright', 'bottomleft'
+        }).addTo(map);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -170,10 +207,10 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         const shopMarker = L.marker(shopLocation, {icon: shopIcon}).addTo(map);
         shopMarker.bindPopup(`
             <div style="text-align: center;">
-                <h3 style="color: #8B4513; margin: 0 0 10px 0;">Cozy Beverage</h3>
-                <p style="margin: 5px 0;"><i class="fas fa-map-marker-alt"></i> Jalan Sunsuria, Bandar Sunsuria, <br>43900 Sepang, Selangor</p>
-                <p style="margin: 5px 0;"><i class="fas fa-phone"></i> (555) 123-4567</p>
-                <p style="margin: 5px 0;"><i class="fas fa-clock"></i> Open Daily: 7AM-9PM</p>
+                <h3 style="color: #8B4513; margin: 0 0 10px 0;">CATFE</h3>
+                <p style="margin: 5px 0;"><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem;"></i> Jalan Sunsuria, Bandar Sunsuria, <br>43900 Sepang, Selangor</p>
+                <p style="margin: 5px 0;"><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> 60123456789</p>
+                <p style="margin: 5px 0;"><i class="fas fa-clock" style="margin-right: 0.5rem;"></i> Open Daily: 7AM - 9PM</p>
             </div>
         `).openPopup();
 
