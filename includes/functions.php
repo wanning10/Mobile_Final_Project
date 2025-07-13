@@ -39,26 +39,37 @@ function getUserById($conn, $userId) {
         return false;
     }
 }
+function updateUserProfile($conn, $userId, $username, $email, $currentPassword, $newPassword) {
+    // Get the current hashed password from DB
+    $stmt = $conn->prepare("SELECT password FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$result) return false;
 
-function updateUserProfile($conn, $userId, $email, $currentPassword, $newPassword = null) {
-    try {
-        $user = getUserById($conn, $userId);
-        if (!$user || !password_verify($currentPassword, $user['password'])) {
+    $hashedPassword = $result['password'];
+
+    // If changing password, verify current password
+    if (!empty($currentPassword) || !empty($newPassword)) {
+        if (!password_verify($currentPassword, $hashedPassword)) {
             return false;
         }
-        
-        if ($newPassword) {
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("UPDATE users SET email = ?, password = ? WHERE id = ?");
-            return $stmt->execute([$email, $hashedPassword, $userId]);
-        } else {
-            $stmt = $conn->prepare("UPDATE users SET email = ? WHERE id = ?");
-            return $stmt->execute([$email, $userId]);
-        }
-    } catch(PDOException $e) {
-        return false;
     }
+
+    // Update logic for password or just username/email
+    if (!empty($newPassword)) {
+        $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $sql = "UPDATE users SET username = ?, email = ?, password = ?, updated_at = NOW() WHERE id = ?";
+        $params = [$username, $email, $newPasswordHash, $userId];
+    } else {
+        $sql = "UPDATE users SET username = ?, email = ?, updated_at = NOW() WHERE id = ?";
+        $params = [$username, $email, $userId];
+    }
+
+    $stmt2 = $conn->prepare($sql);
+    return $stmt2->execute($params);
 }
+
+
 
 function deleteUser($conn, $userId) {
     try {
@@ -452,8 +463,22 @@ function sanitizeInput($input) {
     return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
 }
 
+
+// function validateEmail($email) {
+//     // Must match format: name@domain.tld (tld = at least 2+ letters)
+//     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//         return false;
+//     }
+//     // This will only allow .com, .my, .co, .org, .net, .edu, etc (min 2, max 10 chars)
+//     return preg_match('/\.[a-zA-Z]{2,10}$/', $email);
+// }
+
 function validateEmail($email) {
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+    // Only allow .com, .org, .net, .edu, .my (add more as needed)
+    return preg_match('/\.(com|org|net|edu|my)$/i', $email);
 }
 
 function generateRandomString($length = 10) {
