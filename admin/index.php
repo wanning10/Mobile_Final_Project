@@ -4,7 +4,10 @@ require_once '../config/database.php';
 require_once '../includes/functions.php';
 
 // Check if user is logged in and is admin
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+$isLoggedIn = isset($_SESSION['user_id']);
+$isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+
+if (!$isAdmin) {
     header('Location: ../login.php');
     exit();
 }
@@ -15,9 +18,9 @@ $totalOrders = count(getAllOrders($conn));
 $totalProducts = count(getProducts($conn));
 $totalCategories = count(getCategories($conn));
 
-// Get recent orders
-$recentOrders = getAllOrders($conn);
-$recentOrders = array_slice($recentOrders, 0, 5); // Get only 5 most recent
+// Get recent orders (not used in new design)
+// $recentOrders = getAllOrders($conn);
+// $recentOrders = array_slice($recentOrders, 0, 5); // Not needed now
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,27 +35,53 @@ $recentOrders = array_slice($recentOrders, 0, 5); // Get only 5 most recent
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Logo, left -->
             <div class="nav-logo">
-                <a href="../index.php">
-                    <i class="fas fa-coffee"></i>
-                    <span>Cozy Beverage</span>
+                <a href="index.php">
+                    <img src="../assets/images/logo.png" alt="Logo" style="height:30px;">
+                    <span>CATFE</span>
                 </a>
             </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="../index.php" class="nav-link">Home</a>
-                <a href="../products.php" class="nav-link">Products</a>
+            <!-- Center menu -->
+            <div class="nav-center-menu">
+                <a href="../index.php" class="nav-link">HOME</a>
+                <a href="../about.php" class="nav-link">ABOUT</a>
+                <a href="../products.php" class="nav-link">PRODUCTS</a>
+                <a href="../map.php" class="nav-link">MAP</a>
+            </div>
+            <!-- Right icons -->
+            <div class="nav-right-icons">
                 <a href="../cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
-                    Cart
                     <?php if(isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
                         <span class="cart-badge"><?php echo $_SESSION['cart_count']; ?></span>
                     <?php endif; ?>
                 </a>
-                <a href="../map.php" class="nav-link">Map</a>
-                <a href="../about.php" class="nav-link">About</a>
-                <a href="../profile.php" class="nav-link">Profile</a>
-                <a href="index.php" class="nav-link active">Admin</a>
-                <a href="../logout.php" class="nav-link">Logout</a>
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown">
+                    <a href="#" class="nav-link" id="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-content" id="profile-dropdown">
+                        <a href="../profile.php">My Profile</a>
+                        <a href="../logout.php">Logout</a>
+                    </div>
+                </div>
+                <?php if($isAdmin): ?>
+                <!-- Admin Dropdown -->
+                <div class="admin-dropdown">
+                    <button class="admin-toggle nav-link active" type="button">
+                        <span>ADMIN</span>
+                    </button>
+                    <div class="admin-dropdown-menu">
+                        <a href="index.php">Dashboard</a>
+                        <a href="products.php">Manage Products</a>
+                        <a href="categories.php">Manage Categories</a>
+                        <a href="users.php">Manage Users</a>
+                        <a href="orders.php">Manage Orders</a>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
             <div class="nav-toggle" id="nav-toggle">
                 <span class="bar"></span>
@@ -62,91 +91,36 @@ $recentOrders = array_slice($recentOrders, 0, 5); // Get only 5 most recent
         </div>
     </nav>
 
-    <!-- Admin Dashboard -->
+    <!-- Admin Dashboard Section -->
     <section class="admin-section">
         <div class="container">
-            <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
-            
+            <h2 style="color: #333;">Admin Dashboard</h2>
             <div class="admin-dashboard">
                 <div class="admin-card">
-                    <i class="fas fa-users"></i>
                     <h3>Total Users</h3>
                     <div class="number"><?php echo $totalUsers; ?></div>
-                    <a href="users.php" class="btn btn-outline">Manage Users</a>
                 </div>
-                
                 <div class="admin-card">
-                    <i class="fas fa-shopping-bag"></i>
                     <h3>Total Products</h3>
                     <div class="number"><?php echo $totalProducts; ?></div>
-                    <a href="products.php" class="btn btn-outline">Manage Products</a>
                 </div>
-                
                 <div class="admin-card">
-                    <i class="fas fa-tags"></i>
                     <h3>Total Categories</h3>
                     <div class="number"><?php echo $totalCategories; ?></div>
-                    <a href="categories.php" class="btn btn-outline">Manage Categories</a>
                 </div>
-                
                 <div class="admin-card">
-                    <i class="fas fa-shopping-cart"></i>
                     <h3>Total Orders</h3>
                     <div class="number"><?php echo $totalOrders; ?></div>
-                    <a href="orders.php" class="btn btn-outline">Manage Orders</a>
                 </div>
             </div>
-            
+
             <div class="admin-content">
-                <div class="recent-orders">
-                    <h3><i class="fas fa-clock"></i> Recent Orders</h3>
-                    <?php if (empty($recentOrders)): ?>
-                        <p>No orders yet.</p>
-                    <?php else: ?>
-                        <div class="orders-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($recentOrders as $order): ?>
-                                        <tr>
-                                            <td>#<?php echo $order['id']; ?></td>
-                                            <td><?php echo htmlspecialchars($order['username']); ?></td>
-                                            <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
-                                            <td>
-                                                <span class="status status-<?php echo $order['status']; ?>">
-                                                    <?php echo ucfirst($order['status']); ?>
-                                                </span>
-                                            </td>
-                                            <td><?php echo formatDate($order['created_at']); ?></td>
-                                            <td>
-                                                <a href="order_details.php?id=<?php echo $order['id']; ?>" 
-                                                   class="btn btn-small">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                
                 <div class="admin-actions">
-                    <h3>Quick Actions</h3>
+                    <h3 style="margin-top: 1rem; font-size: 1.5rem; color: #8B4513;">Quick Actions</h3>
                     <div class="actions-grid">
                         <a href="products.php" class="action-card">
-                            <i class="fas fa-plus"></i>
-                            <h4>Add Product</h4>
+                            <i class="fas fa-box-open"></i>
+                            <h4>Manage Products</h4>
                             <p>Add new products to the catalog</p>
                         </a>
                         <a href="categories.php" class="action-card">
@@ -155,13 +129,13 @@ $recentOrders = array_slice($recentOrders, 0, 5); // Get only 5 most recent
                             <p>Organize products by categories</p>
                         </a>
                         <a href="users.php" class="action-card">
-                            <i class="fas fa-user-cog"></i>
+                            <i class="fas fa-users"></i>
                             <h4>Manage Users</h4>
                             <p>View and manage user accounts</p>
                         </a>
                         <a href="orders.php" class="action-card">
-                            <i class="fas fa-list"></i>
-                            <h4>View Orders</h4>
+                            <i class="fas fa-receipt"></i>
+                            <h4>Manage Orders</h4>
                             <p>See all customer orders</p>
                         </a>
                     </div>
@@ -199,5 +173,34 @@ $recentOrders = array_slice($recentOrders, 0, 5); // Get only 5 most recent
     </footer>
 
     <script src="../assets/js/main.js"></script>
+    <script>
+        // Admin Dropdown Toggle
+        const adminToggle = document.querySelector('.admin-toggle');
+        const dropdownMenu = document.querySelector('.admin-dropdown-menu');
+        if(adminToggle && dropdownMenu){
+            adminToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            });
+            window.addEventListener('click', function (e) {
+                if (!e.target.closest('.admin-dropdown')) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+        }
+
+        // Profile Dropdown Toggle
+        document.getElementById("profile-icon").addEventListener("click", function(e){
+            e.preventDefault();
+            var dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+        window.addEventListener("click", function(e){
+            if (!e.target.closest('.profile-dropdown')) {
+                var dropdown = document.getElementById("profile-dropdown");
+                if (dropdown) dropdown.style.display = "none";
+            }
+        });
+    </script>
 </body>
-</html> 
+</html>
