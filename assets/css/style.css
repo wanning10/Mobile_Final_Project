@@ -716,10 +716,12 @@ section h2 {
 /* Products Grid */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
     margin-bottom: 6rem;
+    justify-content: center;
 }
 .featured-products h2 {
     margin-top: 4rem;
@@ -881,6 +883,49 @@ section h2 {
     background-color: #a0522d; /* slightly lighter brown on hover */
 }
 
+.no-products {
+    grid-column: 1 / -1; /* Span across all columns */
+    text-align: center;
+    padding: 3rem 2rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin: 2rem 0;
+}
+
+.no-products i {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.no-products h3 {
+    color: #343a40;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.no-products p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.no-products .btn {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    background-color: #8B4513;
+    border-color: #8B4513;
+}
+
+.no-products .btn:hover {
+    background-color: #773d11;
+    border-color: #773d11;
+}
 
 /* home page audio section */
 /* Audio Section */
@@ -1229,9 +1274,8 @@ section .audio-section {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 .map-section {
-  /* margin: 2rem 0;
-  margin-bottom: 6rem; */
-  margin-top: 2.0rem;  
+  margin: 2rem 0;
+  margin-bottom: 6rem;
 }
 
 /* Shopping Cart Title */
@@ -1252,9 +1296,6 @@ section .audio-section {
   text-align: center;
 }
 
-.leaflet-control {
-    z-index: 400 !important;  /* Ensure visible if needed */
-}
 
 /* Admin Styles */
 .admin-dashboard {

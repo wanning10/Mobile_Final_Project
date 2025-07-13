@@ -143,12 +143,11 @@ class Database {
         
         // Categories
         $categories = [
-            ['Coffee', 'Premium coffee blends and single-origin beans', 'coffee.jpg', 'fas fa-coffee'],
-            ['Tea', 'Fine teas from around the world', 'tea.jpg', 'fas fa-mug-hot'],
-            ['Smoothies', 'Fresh fruit and vegetable smoothies', 'smoothies.jpg', 'fas fa-blender'],
-            ['Juices', 'Freshly squeezed juices', 'juices.jpg', 'fas fa-glass-whiskey'],
-            ['Hot Drinks', 'Hot chocolate, lattes, and more', 'hot-drinks.jpg', 'fas fa-mug-hot'],
-            ['Snacks', 'Delicious snacks to pair with your drinks', 'snacks.jpg', 'fas fa-cookie-bite'],
+            ['Coffee', 'Freshly brewed with premium beans', 'assets/images/categories/cat-coffee.png', 'fas fa-coffee'],
+            ['Tea', 'Aromatic blends for every mood', 'assets/images/categories/cat-tea.png', 'fas fa-mug-hot'],
+            ['Frappé', 'Cold, creamy and refreshing', 'assets/images/categories/cat-frappe.png', 'fas fa-blender'],
+            ['Juices', 'Freshly squeezed for daily vitality', 'assets/images/categories/cat-juices.png', 'fas fa-glass-whiskey'],
+            ['Pastries', 'Sweet and buttery baked delights', 'assets/images/categories/cat-pastries.png', 'fas fa-cookie-bite']
         ];
         
         $stmt = $this->conn->prepare(
@@ -160,19 +159,19 @@ class Database {
         
         // Products
         $products = [
-            ['Espresso Shot', 'Single shot of premium espresso', 3.50, 1, 'espresso.jpg', 50, 1, 1],
-            ['Green Tea', 'Organic green tea with antioxidants', 2.50, 2, 'green-tea.jpg', 100, 1, 0],
-            ['Cappuccino', 'Classic cappuccino with steamed milk', 4.50, 1, 'cappuccino.jpg', 30, 1, 1],
-            ['Green Tea', 'Organic green tea with antioxidants', 2.50, 2, 'green-tea.jpg', 100, 1, 1],
-            ['Chai Latte', 'Spiced chai tea with steamed milk', 4.00, 2, 'chai-latte.jpg', 25, 1, 1],
-            ['Berry Blast Smoothie', 'Mixed berries with yogurt', 5.50, 3, 'berry-smoothie.jpg', 20, 1, 1],
-            ['Tropical Paradise', 'Mango, pineapple, and coconut', 6.00, 3, 'tropical-smoothie.jpg', 15, 1, 0],
-            ['Orange Juice', 'Freshly squeezed orange juice', 3.00, 4, 'orange-juice.jpg', 40, 1, 1],
-            ['Apple Juice', 'Fresh apple juice', 2.75, 4, 'apple-juice.jpg', 35, 1, 0],
-            ['Hot Chocolate', 'Rich hot chocolate with whipped cream', 4.25, 5, 'hot-chocolate.jpg', 30, 1, 1],
-            ['Caramel Latte', 'Espresso with caramel and steamed milk', 5.00, 5, 'caramel-latte.jpg', 25, 1, 1]
+            ['Blonde Vanilla Latte', 'Extra-smooth Blonde Espresso, velvety steamed milk and vanilla syrup come together to create a delightful new twist on a beloved espresso classic.', 17.50, 1, 'assets/images/products/coffee/vanilla-latte.png', 50, 1, 1],
+            ['Caffè Americano', 'Espresso shots topped with hot water create a light layer of crema culminating in this wonderfully rich cup with depth and nuance.', 15.00, 1, 'assets/images/products/coffee/iced-americano.png', 45, 1, 1],
+            ['Cappuccino', 'Dark, rich espresso lies in wait under a smoothed and stretched layer of thick milk foam. An alchemy of barista artistry and craft.', 16.50, 1, 'assets/images/products/coffee/cappucino.png', 40, 1, 1],
+            ['Iced Matcha Latte', 'Smooth and creamy, this vibrant green tea latte is handcrafted with our new unsweetened matcha, milk, and classic syrup and served with ice.', 18.90, 2, 'assets/images/products/tea/iced-matcha-latte.png', 35, 1, 1],
+            ['Iced Black Tea Lemonade', 'Smooth, refreshing Mighty Leaf Summer Solstice iced tea layered with tart and sweet lemonade.', 16.90, 2, 'assets/images/products/tea/iced-blacktea-lemonade.png', 30, 1, 0],
+            ['Caramel Frappé', 'Rich caramel adds some indulgence to our double-strength Baridi Blend cold brew. We top this coffee-forward whipped refreshment with whipped cream and a drizzle of caramel sauce.', 16.90, 3, 'assets/images/products/frappe/caramel-frappe.png', 25, 1, 1],
+            ['Mocha Frappé', 'Double-strength Baridi Cold Brew and Peet\'s housemade chocolate sauce are whipped with milk and ice for sweet refreshment topped with whipped cream.', 18.50, 3, 'assets/images/products/frappe/mocha-frappe.png', 20, 1, 1],
+            ['Orange Juice', 'Sweet strawberry, passionfruit, and açaí flavors balanced with the delightful zing of lemonade, served over ice with freeze-dried strawberry pieces.', 7.50, 4, 'assets/images/products/juice/orange-juice.png', 40, 1, 0],
+            ['Strawberry Açaí Lemonade Refresher', 'Sweet strawberry, passionfruit, and açaí flavors balanced with the delightful zing of lemonade, served over ice with freeze-dried strawberry pieces.', 9.50, 4, 'assets/images/products/juice/strawberry-lemonade.png', 35, 1, 1],
+            ['Chocolate Croissant', 'Two generous pieces of chocolate wrapped in a butter croissant with soft, flaky layers and a golden-brown crust.', 12.50, 5, 'assets/images/products/pastries/chocolate-croissant.png', 30, 1, 1],
+            ['Baked Apple Croissant', 'Layers of croissant dough wrapped around a warm apple filling, topped with sugar and baked to a golden finish.', 10.00, 5, 'assets/images/products/pastries/baked-apple-croissant.png', 25, 1, 0],
         ];
-        
+
         $stmt = $this->conn->prepare(
             "INSERT IGNORE INTO products (name, description, price, category_id, image_url, stock_quantity, is_available, is_featured) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
