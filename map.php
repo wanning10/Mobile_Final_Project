@@ -288,6 +288,23 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         return R * c;
     }
     </script>
+
+      <script src="assets/js/main.js"></script>
+        <script>
+            document.getElementById("profile-icon").addEventListener("click", function(e){
+                e.preventDefault();
+                var dropdown = document.getElementById("profile-dropdown");
+                dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+            });
+
+            // Close dropdown when clicking outside
+            window.addEventListener("click", function(e){
+                if (!e.target.matches('#profile-icon, #profile-icon *')) {
+                    var dropdown = document.getElementById("profile-dropdown");
+                    if (dropdown) dropdown.style.display = "none";
+                }
+            });
+     </script>
     
 </body>
 </html> 
