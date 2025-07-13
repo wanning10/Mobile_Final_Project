@@ -199,13 +199,17 @@ updateCartCount($conn, $_SESSION['user_id']);
             <?php endif; ?>
             
             <?php if (empty($cartItems)): ?>
-                <div class="empty-cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h3>Your cart is empty</h3>
-                    <p>Looks like you haven't added any items to your cart yet.</p>
-                    <a href="products.php" class="btn btn-primary">
-                        <i class="fas fa-shopping-bag"></i> Start Shopping
-                    </a>
+                <div class="empty-cart-container">
+                    <div class="empty-cart-content">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h2 class="empty-cart-title">Your Cart is Empty</h2>
+                        <p class="empty-cart-message">Looks like you haven't added any items yet</p>
+                        <a href="products.php" class="btn btn-primary empty-cart-button">
+                            <i class="fas fa-utensils"></i> Browse Menu
+                        </a>
+                    </div>
                 </div>
             <?php else: ?>
                 <!-- Cart container left-right -->
