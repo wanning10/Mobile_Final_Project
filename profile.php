@@ -332,26 +332,26 @@ $userOrders = getUserOrders($conn, $_SESSION['user_id']);
         });
     </script>
     <!-- Edit Profile Modal -->
-    <div id="editProfileModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModalBtn">&times;</span>
+    <div id="editProfileModal" class="edit-modal" style="display:none;">
+        <div class="edit-modal-content">
+            <span class="close-edit-modal" id="closeModalBtn">&times;</span>
             <h2 id="modalTitle">Edit Profile</h2>
             <form method="POST" action="profile.php" id="edit-profile-form">
                 <input type="hidden" name="edit_profile" value="1">
                 <input type="hidden" name="edit_type" id="editType">
-                
+
                 <!-- Username -->
                 <div id="editUsernameField" class="form-group" style="display:none;">
                     <label>Username:</label>
                     <input type="text" name="username" id="editUsernameInput" value="<?php echo htmlspecialchars($user['username']); ?>">
                 </div>
-                
+
                 <!-- Email -->
                 <div id="editEmailField" class="form-group" style="display:none;">
                     <label>Email:</label>
                     <input type="email" name="email" id="editEmailInput" value="<?php echo htmlspecialchars($user['email']); ?>">
                 </div>
-                
+
                 <!-- Password -->
                 <div id="editPasswordField" style="display:none;">
                     <div class="form-group">
@@ -373,15 +373,12 @@ $userOrders = getUserOrders($conn, $_SESSION['user_id']);
     </div>
 
     <script>
-    function openEditModal(event, type) {
-        event.preventDefault();
-
-        // Hide all
+    function openEditModal(e, type) {
+        e.preventDefault();
         document.getElementById('editUsernameField').style.display = 'none';
         document.getElementById('editEmailField').style.display = 'none';
         document.getElementById('editPasswordField').style.display = 'none';
 
-        // Set which field to show
         document.getElementById('editType').value = type;
         if (type === 'username') {
             document.getElementById('modalTitle').textContent = 'Edit Username';
@@ -395,7 +392,6 @@ $userOrders = getUserOrders($conn, $_SESSION['user_id']);
             document.getElementById('modalTitle').textContent = 'Change Password';
             document.getElementById('editPasswordField').style.display = 'block';
         }
-
         document.getElementById('editProfileModal').style.display = 'block';
     }
 
@@ -409,6 +405,7 @@ $userOrders = getUserOrders($conn, $_SESSION['user_id']);
             modal.style.display = "none";
         }
     };
+
     </script>
 </body>
 </html>
