@@ -75,9 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize Map if on map page
-    if (window.location.pathname.includes('map.php')) {
-        initializeMap();
-    }
+    // if (window.location.pathname.includes('map.php')) {
+    //     initializeMap();
+    // }
     
     // Audio/Video Controls
     initializeMediaControls();
@@ -349,37 +349,37 @@ function updateProductsDisplay(products) {
 }
 
 // Initialize Map
-function initializeMap() {
-    // Cozy Beverage Shop Location (example coordinates)
-    const shopLocation = [40.7128, -74.0060]; // New York coordinates
+// function initializeMap() {
+//     // Cozy Beverage Shop Location (example coordinates)
+//     const shopLocation = [40.7128, -74.0060]; // New York coordinates
     
-    const map = L.map('map').setView(shopLocation, 15);
+//     const map = L.map('map').setView(shopLocation, 15);
     
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+//     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//         attribution: '© OpenStreetMap contributors'
+//     }).addTo(map);
     
-    // Add shop marker
-    const shopMarker = L.marker(shopLocation).addTo(map);
-    shopMarker.bindPopup('<b>Cozy Beverage Shop</b><br>123 Coffee Street<br>New York, NY 10001').openPopup();
+//     // Add shop marker
+//     const shopMarker = L.marker(shopLocation).addTo(map);
+//     shopMarker.bindPopup('<b>Cozy Beverage Shop</b><br>123 Coffee Street<br>New York, NY 10001').openPopup();
     
-    // Get user location if permission granted
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const userLocation = [position.coords.latitude, position.coords.longitude];
-            const userMarker = L.marker(userLocation).addTo(map);
-            userMarker.bindPopup('<b>Your Location</b>').openPopup();
+//     // Get user location if permission granted
+//     if (navigator.geolocation) {
+//         navigator.geolocation.getCurrentPosition(function(position) {
+//             const userLocation = [position.coords.latitude, position.coords.longitude];
+//             const userMarker = L.marker(userLocation).addTo(map);
+//             userMarker.bindPopup('<b>Your Location</b>').openPopup();
             
-            // Draw route to shop
-            const route = L.polyline([userLocation, shopLocation], {color: 'red'}).addTo(map);
+//             // Draw route to shop
+//             const route = L.polyline([userLocation, shopLocation], {color: 'red'}).addTo(map);
             
-            // Fit map to show both markers
-            map.fitBounds(L.latLngBounds([userLocation, shopLocation]));
-        }, function(error) {
-            console.log('Geolocation error:', error);
-        });
-    }
-}
+//             // Fit map to show both markers
+//             map.fitBounds(L.latLngBounds([userLocation, shopLocation]));
+//         }, function(error) {
+//             console.log('Geolocation error:', error);
+//         });
+//     }
+// }
 
 // Initialize Media Controls
 function initializeMediaControls() {
