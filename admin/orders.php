@@ -32,7 +32,7 @@ if (isset($_POST['edit_order'])) {
     $status = sanitizeInput($_POST['status']);
     $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
     $stmt->execute([$status, $orderId]);
-    header('Location: orders.php');
+    header('Location: orders.php?updated=1');
     exit();
 }
 
@@ -41,7 +41,7 @@ if (isset($_POST['delete_order'])) {
     $orderId = intval($_POST['order_id']);
     $stmt = $conn->prepare("DELETE FROM orders WHERE id = ?");
     $stmt->execute([$orderId]);
-    header('Location: orders.php');
+    header('Location: orders.php?deleted=1');
     exit();
 }
 
@@ -127,8 +127,9 @@ $orders = getAllOrders($conn);
                         <label for="status">Status</label>
                         <select name="status" id="status">
                             <option value="pending" <?php if ($editOrder['status'] == 'pending') echo 'selected'; ?>>Pending</option>
-                            <option value="processing" <?php if ($editOrder['status'] == 'processing') echo 'selected'; ?>>Processing</option>
-                            <option value="completed" <?php if ($editOrder['status'] == 'completed') echo 'selected'; ?>>Completed</option>
+                            <option value="confirmed" <?php if ($editOrder['status'] == 'confirmed') echo 'selected'; ?>>Confirmed</option>
+                            <option value="shipped" <?php if ($editOrder['status'] == 'shipped') echo 'selected'; ?>>Shipped</option>
+                            <option value="delivered" <?php if ($editOrder['status'] == 'delivered') echo 'selected'; ?>>Delivered</option>
                             <option value="cancelled" <?php if ($editOrder['status'] == 'cancelled') echo 'selected'; ?>>Cancelled</option>
                         </select>
                     </div>
@@ -240,4 +241,18 @@ $orders = getAllOrders($conn);
     });
     </script>
 </body>
+<?php if (isset($_GET['updated'])): ?>
+<script>
+window.onload = function() {
+    alert('Order has been successfully updated.');
+}
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['deleted'])): ?>
+<script>
+window.onload = function() {
+    alert('Order has been successfully deleted.');
+}
+</script>
+<?php endif; ?>
 </html>

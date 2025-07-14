@@ -28,7 +28,7 @@ if (isset($_POST['add_product'])) {
     ];
     if (!empty($data['name']) && $data['category_id'] > 0) {
         createProduct($conn, $data);
-        header('Location: products.php');
+        header('Location: products.php?added=1');
         exit();
     }
 }
@@ -48,7 +48,7 @@ if (isset($_POST['edit_product'])) {
     ];
     if (!empty($data['name']) && $data['category_id'] > 0) {
         updateProduct($conn, $id, $data);
-        header('Location: products.php');
+        header('Location: products.php?updated=1');
         exit();
     }
 }
@@ -57,7 +57,7 @@ if (isset($_POST['edit_product'])) {
 if (isset($_POST['delete_product'])) {
     $id = intval($_POST['product_id']);
     deleteProduct($conn, $id);
-    header('Location: products.php');
+    header('Location: products.php?deleted=1');
     exit();
 }
 
@@ -217,7 +217,7 @@ $products = getProducts($conn);
                                 <td><?php echo $product['is_featured'] ? 'Yes' : 'No'; ?></td>
                                 <td>
                                     <?php if ($product['image_url']): ?>
-                                        <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/>
+                                        <img src="/<?php echo ltrim(htmlspecialchars($product['image_url']), '/'); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/>
                                     <?php endif; ?>
                                 </td>
                                 <td class="description-cell" title="<?php echo htmlspecialchars($product['description']); ?>" style="max-width:200px; overflow-x:auto;">
@@ -416,4 +416,25 @@ $products = getProducts($conn);
         });
     </script>
 </body>
+<?php if (isset($_GET['added'])): ?>
+<script>
+window.onload = function() {
+    alert('Product has been successfully added.');
+}
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['updated'])): ?>
+<script>
+window.onload = function() {
+    alert('Product has been successfully updated.');
+}
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['deleted'])): ?>
+<script>
+window.onload = function() {
+    alert('Product has been successfully deleted.');
+}
+</script>
+<?php endif; ?>
 </html>

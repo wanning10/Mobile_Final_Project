@@ -6,6 +6,20 @@ require_once 'includes/functions.php';
 // Check if user is logged in
 $isLoggedIn = isset($_SESSION['user_id']);
 $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+
+// Handle contact form submission
+$contactSuccess = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
+    $firstName = sanitizeInput($_POST['first_name']);
+    $lastName = sanitizeInput($_POST['last_name']);
+    $email = sanitizeInput($_POST['email']);
+    $message = sanitizeInput($_POST['message']);
+
+    $stmt = $conn->prepare("INSERT INTO contact_messages (first_name, last_name, email, message) VALUES (?, ?, ?, ?)");
+    if ($stmt->execute([$firstName, $lastName, $email, $message])) {
+        $contactSuccess = true;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -179,15 +193,23 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         <div class="contact-info">
             <img src="assets/images/contact-us.webp" alt="Contact">
         </div>
-        <form class="contact-form">
+        <form class="contact-form" method="post" action="">
         <input type="text" name="first_name" placeholder="First Name" required>
         <input type="text" name="last_name" placeholder="Last Name" required>
         <input type="email" name="email" placeholder="What's your email?" required>
         <textarea name="message" placeholder="Your questions..." required></textarea>
-        <button type="submit">Send Message</button>
+        <button type="submit" name="contact_submit">Send Message</button>
         </form>
     </div>
     </section>
+
+    <?php if ($contactSuccess): ?>
+<script>
+    window.onload = function() {
+        alert("The message has been sent.");
+    }
+</script>
+<?php endif; ?>
 
 
     <!-- About Section

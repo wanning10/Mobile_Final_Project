@@ -346,4 +346,11 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
     
 
 </body>
+<?php if (isset($_GET['logout'])): ?>
+<script>
+window.onload = function() {
+    alert('You have logged out successfully.');
+}
+</script>
+<?php endif; ?>
 </html> 
