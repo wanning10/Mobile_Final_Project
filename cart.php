@@ -27,11 +27,22 @@ if (isset($_SESSION['success'])) {
 }
 
 // Get cart items
+// $cartItems = getCartItems($conn, $_SESSION['user_id']);
+// $cartTotal = getCartTotal($conn, $_SESSION['user_id']);
+
+// // Update cart count in session
+// updateCartCount($conn, $_SESSION['user_id']);
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+if (!$isLoggedIn) {
+    header('Location: login.php');
+    exit();
+}
+
 $cartItems = getCartItems($conn, $_SESSION['user_id']);
 $cartTotal = getCartTotal($conn, $_SESSION['user_id']);
-
-// Update cart count in session
 updateCartCount($conn, $_SESSION['user_id']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -319,7 +330,22 @@ updateCartCount($conn, $_SESSION['user_id']);
             </div>
         </div>
     </footer>
+    
+    <script>
+        document.getElementById("profile-icon").addEventListener("click", function(e){
+            e.preventDefault();
+            var dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
 
+        // Close dropdown when clicking outside
+        window.addEventListener("click", function(e){
+            if (!e.target.matches('#profile-icon, #profile-icon *')) {
+                var dropdown = document.getElementById("profile-dropdown");
+                if (dropdown) dropdown.style.display = "none";
+            }
+        });
+        </script>
 
     <script src="assets/js/main.js"></script>
 </body>

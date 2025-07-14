@@ -874,7 +874,7 @@ section h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 6rem 0 1rem 0;
+    margin: 4rem 0 1rem 0;
     border-radius: 25px;
     gap: 0.5rem;
     
@@ -1414,6 +1414,18 @@ td.description-cell::after {
     background-color: #f0f0f0;
 }
 
+.admin-section {
+    padding-top: 3rem !important;
+    padding-bottom: 6rem !important;
+}
+.admin-section .container {
+    min-height: 100px !important;
+    padding: 30px 20px;
+}
+.admin-section h2 {
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+}
 
 
 /* Additional Styles for New Components */

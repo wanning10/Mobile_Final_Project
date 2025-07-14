@@ -69,8 +69,6 @@ function updateUserProfile($conn, $userId, $username, $email, $currentPassword, 
     return $stmt2->execute($params);
 }
 
-
-
 function deleteUser($conn, $userId) {
     try {
         $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
@@ -445,6 +443,7 @@ function getAllUsers($conn) {
         return [];
     }
 }
+
 
 function getAllOrders($conn) {
     try {

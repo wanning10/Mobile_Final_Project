@@ -54,7 +54,24 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
                     </div>
                 </div>
                 <?php if($isAdmin): ?>
-                    <a href="admin/" class="nav-link">ADMIN</a>
+                    <!-- <a href="../admin/index.php" class="nav-link">ADMIN</a> -->
+                     <!-- Admin Dropdown -->
+                    <div class="admin-dropdown">
+                        <!-- <a href="index.php" class="admin-toggle nav-link active">
+                            <span>ADMIN</span>
+                        </a> -->
+                        <button class="admin-toggle nav-link" href="#">
+                            <!-- <i class="fas fa-user-cog"></i> -->
+                            <span>ADMIN</span>
+                        </button>
+                        <div class="admin-dropdown-menu">
+                            <a href="admin/index.php">Dashboard</a>
+                            <a href="admin/products.php">Manage Products</a>
+                            <a href="admin/categories.php">Manage Categories</a>
+                            <a href="admin/users.php">Manage Users</a>
+                            <a href="admin/orders.php">Manage Orders</a>
+                        </div>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -287,6 +304,21 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
     }
+    </script>
+        <script>
+        const adminToggle = document.querySelector('.admin-toggle');
+        const dropdownMenu = document.querySelector('.admin-dropdown-menu');
+
+        adminToggle.addEventListener('click', () => {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Optional: Close when clicking outside
+        window.addEventListener('click', function (e) {
+            if (!e.target.closest('.admin-dropdown')) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
     </script>
 
       <script src="assets/js/main.js"></script>

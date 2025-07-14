@@ -27,7 +27,7 @@ $totalCategories = count(getCategories($conn));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Cozy Beverage</title>
+    <title>Admin Dashboard - CATFE</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -145,29 +145,38 @@ $totalCategories = count(getCategories($conn));
     </section>
 
     <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Cozy Beverage</h3>
-                    <p>Your perfect companion for a relaxing beverage experience.</p>
+                <div class="footer-section" style="padding-right: 3em;">
+                    <!-- <h3>CATFE</h3> -->
+                     <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <img src="../assets/images/logo.png" alt="Logo" style="height: 30px;">
+                        CATFE
+                    </h3>
+                    <p>Sip, unwind, and enjoy the gentle company of cats.
+                        Catfe brings comfort, quality coffee, and calm all in one cozy space.</p>
                 </div>
-                <div class="footer-section">
+                <div class="footer-section" style="padding-left: 5em;">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="../products.php">Products</a></li>
-                        <li><a href="../about.php">About</a></li>
-                        <li><a href="../map.php">Location</a></li>
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="products.php">Products</a></li>
+                        <li><a href="about.php">About</a></li>
+                        <li><a href="map.php">Map</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Contact</h4>
-                    <p>Email: info@cozybeverage.com</p>
-                    <p>Phone: (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> Jalan Sunsuria, Bandar Sunsuria, 43900 Sepang, Selangor</p>
+                    <p><i class="fas fa-phone" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> 60123456789</p>
+                    <p><i class="fas fa-envelope" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> catfe@example.com</p>
+                    <p><i class="fas fa-clock" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> Open Daily: 7AM - 9PM</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Cozy Beverage. All rights reserved.</p>
+                <p>&copy; 2025 Catfe. All rights reserved.</p>
             </div>
         </div>
     </footer>

@@ -3,37 +3,29 @@ session_start();
 require_once '../config/database.php';
 require_once '../includes/functions.php';
 
+// For nav bar dropdowns
+$isLoggedIn = isset($_SESSION['user_id']);
+$isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+
 // Ensure user is admin
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+if (!$isAdmin) {
     header('Location: ../login.php');
     exit();
 }
 
-// Handle Edit User
-$editUser = null;
-if (isset($_GET['edit'])) {
-    $editUser = getUserById($conn, intval($_GET['edit']));
-}
-
-// Handle Update User
-if (isset($_POST['edit_user'])) {
+// Handle Delete User
+if (isset($_POST['delete_user'])) {
     $userId = intval($_POST['user_id']);
-    $email = sanitizeInput($_POST['email']);
-    $currentPassword = $_POST['current_password'];
-    $newPassword = !empty($_POST['new_password']) ? $_POST['new_password'] : null;
-    $result = updateUserProfile($conn, $userId, $email, $currentPassword, $newPassword);
-    if ($result) {
-        header('Location: users.php');
-        exit();
-    } else {
-        $editUser = getUserById($conn, $userId);
-        $error = 'Failed to update user. Please check the current password.';
+    // Prevent deleting yourself (optional)
+    if ($userId != $_SESSION['user_id']) {
+        deleteUser($conn, $userId);
     }
+    header('Location: users.php');
+    exit();
 }
 
-// Get all users
+// Get all users (excluding the currently logged-in admin)
 $users = getAllUsers($conn);
-// Exclude the currently logged-in admin from the list
 $users = array_filter($users, function($user) {
     return $user['id'] != $_SESSION['user_id'];
 });
@@ -52,27 +44,49 @@ $users = array_filter($users, function($user) {
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="../index.php">
-                    <i class="fas fa-coffee"></i>
-                    <span>Cozy Beverage</span>
+                <a href="index.php">
+                    <img src="../assets/images/logo.png" alt="Logo" style="height:30px;">
+                    <span>CATFE</span>
                 </a>
             </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="../index.php" class="nav-link">Home</a>
-                <a href="../products.php" class="nav-link">Products</a>
+            <!-- Centered menu links -->
+            <div class="nav-center-menu">
+                <a href="../index.php" class="nav-link">HOME</a>
+                <a href="../about.php" class="nav-link">ABOUT</a>
+                <a href="../products.php" class="nav-link">PRODUCTS</a>
+                <a href="../map.php" class="nav-link">MAP</a>
+            </div>
+            <!-- Right icons (cart & profile) -->
+            <div class="nav-right-icons">
                 <a href="../cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
-                    Cart
                     <?php if(isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
                         <span class="cart-badge"><?php echo $_SESSION['cart_count']; ?></span>
                     <?php endif; ?>
                 </a>
-                <a href="../map.php" class="nav-link">Map</a>
-                <a href="../about.php" class="nav-link">About</a>
-                <a href="../profile.php" class="nav-link">Profile</a>
-                <a href="index.php" class="nav-link">Admin</a>
-                <a href="users.php" class="nav-link active">Users</a>
-                <a href="../logout.php" class="nav-link">Logout</a>
+                <div class="profile-dropdown">
+                    <a href="#" class="nav-link" id="profile-icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-content" id="profile-dropdown">
+                        <a href="../profile.php">My Profile</a>
+                        <a href="../logout.php">Logout</a>
+                    </div>
+                </div>
+                <?php if($isAdmin): ?>
+                    <div class="admin-dropdown">
+                        <button class="admin-toggle nav-link active" href="#">
+                            <span>ADMIN</span>
+                        </button>
+                        <div class="admin-dropdown-menu">
+                            <a href="index.php">Dashboard</a>
+                            <a href="products.php">Manage Products</a>
+                            <a href="categories.php">Manage Categories</a>
+                            <a href="users.php">Manage Users</a>
+                            <a href="orders.php">Manage Orders</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="nav-toggle" id="nav-toggle">
                 <span class="bar"></span>
@@ -84,41 +98,10 @@ $users = array_filter($users, function($user) {
 
     <section class="admin-section">
         <div class="container">
-            <h2><i class="fas fa-user-cog"></i> Manage Users</h2>
-
-            <!-- Edit User Form -->
-            <?php if ($editUser): ?>
-                <div class="admin-form">
-                    <h3>Edit User: <?php echo htmlspecialchars($editUser['username']); ?></h3>
-                    <?php if (!empty($error)): ?>
-                        <div class="error-message"><?php echo $error; ?></div>
-                    <?php endif; ?>
-                    <form method="post" action="">
-                        <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" required value="<?php echo htmlspecialchars($editUser['email']); ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="current_password">Current Password <span style="color:red">*</span></label>
-                            <input type="password" name="current_password" id="current_password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="new_password">New Password (leave blank to keep current)</label>
-                            <input type="password" name="new_password" id="new_password">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" name="edit_user" class="btn">Update User</button>
-                            <a href="users.php" class="btn btn-outline">Cancel</a>
-                        </div>
-                    </form>
-                </div>
-            <?php endif; ?>
-
+            <h2 style="color: #333;">Manage Users</h2>
             <!-- Users Table -->
             <div class="admin-table">
-                <h3>All Users</h3>
-                <table>
+                <table class="admin-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -138,10 +121,19 @@ $users = array_filter($users, function($user) {
                                 <td><?php echo $user['is_admin'] ? 'Admin' : 'User'; ?></td>
                                 <td><?php echo isset($user['created_at']) ? htmlspecialchars($user['created_at']) : '-'; ?></td>
                                 <td>
-                                    <a href="users.php?edit=<?php echo $user['id']; ?>" class="btn btn-small"><i class="fas fa-edit"></i></a>
+                                    <!-- Remove (delete) user button -->
+                                    <form method="post" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this user?');">
+                                        <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                        <button type="submit" name="delete_user" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
+                        <?php if (empty($users)): ?>
+                            <tr>
+                                <td colspan="6" style="text-align:center;">No other users found.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -151,29 +143,63 @@ $users = array_filter($users, function($user) {
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Cozy Beverage</h3>
-                    <p>Your perfect companion for a relaxing beverage experience.</p>
+                <div class="footer-section" style="padding-right: 3em;">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <img src="../assets/images/logo.png" alt="Logo" style="height: 30px;">
+                        CATFE
+                    </h3>
+                    <p>Sip, unwind, and enjoy the gentle company of cats.
+                        Catfe brings comfort, quality coffee, and calm all in one cozy space.</p>
                 </div>
-                <div class="footer-section">
+                <div class="footer-section" style="padding-left: 5em;">
                     <h4>Quick Links</h4>
                     <ul>
+                        <li><a href="../index.php">Home</a></li>
                         <li><a href="../products.php">Products</a></li>
                         <li><a href="../about.php">About</a></li>
-                        <li><a href="../map.php">Location</a></li>
+                        <li><a href="../map.php">Map</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Contact</h4>
-                    <p>Email: info@cozybeverage.com</p>
-                    <p>Phone: (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> Jalan Sunsuria, Bandar Sunsuria, 43900 Sepang, Selangor</p>
+                    <p><i class="fas fa-phone" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> 60123456789</p>
+                    <p><i class="fas fa-envelope" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> catfe@example.com</p>
+                    <p><i class="fas fa-clock" style="margin-right: 0.5rem; margin-bottom: 0.5rem;"></i> Open Daily: 7AM - 9PM</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Cozy Beverage. All rights reserved.</p>
+                <p>&copy; 2025 Catfe. All rights reserved.</p>
             </div>
         </div>
     </footer>
     <script src="../assets/js/main.js"></script>
+    <script>
+        // Admin Dropdown
+        const adminToggle = document.querySelector('.admin-toggle');
+        const dropdownMenu = document.querySelector('.admin-dropdown-menu');
+        adminToggle.addEventListener('click', () => {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+        window.addEventListener('click', function (e) {
+            if (!e.target.closest('.admin-dropdown')) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    </script>
+    <script>
+    document.getElementById("profile-icon").addEventListener("click", function(e){
+        e.preventDefault();
+        var dropdown = document.getElementById("profile-dropdown");
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
+    // Close dropdown when clicking outside
+    window.addEventListener("click", function(e){
+        if (!e.target.matches('#profile-icon, #profile-icon *')) {
+            var dropdown = document.getElementById("profile-dropdown");
+            if (dropdown) dropdown.style.display = "none";
+        }
+    });
+    </script>
 </body>
 </html>
