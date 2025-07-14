@@ -345,7 +345,7 @@ updateCartCount($conn, $_SESSION['user_id']);
                 if (dropdown) dropdown.style.display = "none";
             }
         });
-        </script>
+    </script>
 
     <script src="assets/js/main.js"></script>
 </body>

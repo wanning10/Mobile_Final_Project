@@ -878,7 +878,6 @@ section h2 {
     margin: 4rem 0 1rem 0;
     border-radius: 25px;
     gap: 0.5rem;
-    
 }
 
 .product-search-input {
@@ -1614,11 +1613,11 @@ td.description-cell::after {
   color: #8B4513; /* or your desired color code */
 }
 
-.order-items {
+.order-summary .order-items {
     margin-bottom: 2rem;
 }
 
-.order-item {
+.order-summary .order-item {
     display: flex;
     justify-content: space-between;
     align-items: center;

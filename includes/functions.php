@@ -352,9 +352,15 @@ function getCartCount($conn, $userId) {
 }
 
 // Order Functions
-function createOrder($conn, $userId, $totalAmount, $shippingAddress, $shippingPhone, $paymentMethod = 'Credit Card') {
+function createOrder($conn, $userId, $totalAmount, $shippingAddress, $shippingPhone, $paymentMethod) {
     try {
         $conn->beginTransaction();
+        
+        // Validate payment method
+        $validPaymentMethods = ['credit_card', 'paypal', 'grabpay'];
+        if (!in_array($paymentMethod, $validPaymentMethods)) {
+            throw new Exception('Invalid payment method');
+        }
         
         // Generate unique order number
         $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
