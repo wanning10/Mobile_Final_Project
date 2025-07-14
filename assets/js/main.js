@@ -121,10 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Add to Cart Function
 function addToCart(productId) {
-    if (!isLoggedIn()) {
-        showAlert('Please login to add items to cart', 'warning');
-        return;
-    }
+    // if (isLoggedIn() === false) {
+    //     showAlert('Please login to add items to cart', 'warning');
+    //     return;
+    // }
     
     fetch('ajax/add_to_cart.php', {
         method: 'POST',
@@ -141,6 +141,15 @@ function addToCart(productId) {
         if (data.success) {
             showAlert('Item added to cart successfully!', 'success');
             updateCartCount(data.cart_count);
+            let badge = document.querySelector('.cart-badge');
+            if (!badge) {
+                // Create badge if it doesn't exist
+                badge = document.createElement('span');
+                badge.className = 'cart-badge';
+                document.querySelector('.fa-shopping-cart').parentNode.appendChild(badge);
+            }
+            badge.textContent = data.cart_count;
+            badge.style.display = (parseInt(data.cart_count) > 0) ? 'inline-block' : 'none';
         } else {
             showAlert(data.message || 'Failed to add item to cart', 'error');
         }
@@ -179,7 +188,7 @@ function updateCartQuantity(productId, quantity) {
 
 // Remove from Cart
 function removeFromCart(productId) {
-    if (confirm('Are you sure you want to remove this item from your cart?')) {
+    // if (confirm('Are you sure you want to remove this item from your cart?')) {
         fetch('ajax/remove_from_cart.php', {
             method: 'POST',
             headers: {
@@ -202,7 +211,7 @@ function removeFromCart(productId) {
             console.error('Error:', error);
             showAlert('An error occurred while removing item', 'error');
         });
-    }
+    // }
 }
 
 // Update Cart Display

@@ -6,9 +6,13 @@ require_once 'includes/functions.php';
 // Check if user is logged in
 $isLoggedIn = isset($_SESSION['user_id']);
 $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+
+
+$featuredProducts = getRandomProducts($conn, 6);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +21,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
@@ -40,7 +45,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
             <div class="nav-right-icons">
                 <a href="cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
-                    <?php if(isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
+                    <?php if (isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
                         <span class="cart-badge"><?php echo $_SESSION['cart_count']; ?></span>
                     <?php endif; ?>
                 </a>
@@ -53,9 +58,9 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
                         <a href="logout.php">Logout</a>
                     </div>
                 </div>
-                <?php if($isAdmin): ?>
+                <?php if ($isAdmin): ?>
                     <!-- <a href="../admin/index.php" class="nav-link">ADMIN</a> -->
-                     <!-- Admin Dropdown -->
+                    <!-- Admin Dropdown -->
                     <div class="admin-dropdown">
                         <!-- <a href="index.php" class="admin-toggle nav-link active">
                             <span>ADMIN</span>
@@ -117,7 +122,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
                     <h3>Coffee</h3>
                     <p>Freshly brewed with premium beans</p>
                 </a>
-                
+
                 <a href="products.php?category=tea" class="category-card">
                     <img src="assets/images/categories/cat-tea.png" alt="Tea" class="category-image">
                     <h3>Tea</h3>
@@ -146,7 +151,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
     </section>
 
     <!-- Featured Products (Static) -->
-    <section class="featured-products">
+    <!-- <section class="featured-products">
         <div class="container">
             <h2>Featured Products</h2>
             <p class="section-subtitle">A variety of cozy selections made just for you</p>
@@ -236,6 +241,38 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
                 </div>
             </div>
         </div>
+    </section> -->
+
+
+    <!-- Featured Products (Dynamic) -->
+    <section class="featured-products">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <p class="section-subtitle">A variety of cozy selections made just for you</p>
+            <div class="products-grid">
+                <?php foreach ($featuredProducts as $product): ?>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                        </div>
+                        <div class="product-info">
+                            <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                            <p class="product-description"><?php echo htmlspecialchars($product['description']); ?></p>
+                            <div class="product-price">RM <?php echo number_format($product['price'], 2); ?></div>
+                            <?php if($isLoggedIn): ?>
+                                <button class="btn btn-primary add-to-cart" data-product-id="<?= $product['id'] ?>">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                            <?php else: ?>
+                                <a href="login.php" class="btn btn-secondary">
+                                    <i class="fas fa-sign-in-alt"></i> Login to Add
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </section>
 
     <!-- Audio Player Section -->
@@ -261,7 +298,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
             <div class="footer-content">
                 <div class="footer-section" style="padding-right: 3em;">
                     <!-- <h3>CATFE</h3> -->
-                     <h3 style="display: flex; align-items: center; gap: 8px;">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
                         <img src="assets/images/logo.png" alt="Logo" style="height: 30px;">
                         CATFE
                     </h3>
@@ -320,7 +357,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
         });
 
         // Optional: Close when clicking outside
-        window.addEventListener('click', function (e) {
+        window.addEventListener('click', function(e) {
             if (!e.target.closest('.admin-dropdown')) {
                 dropdownMenu.style.display = 'none';
             }
@@ -328,22 +365,61 @@ $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] 
     </script>
 
     <script>
-    document.getElementById("profile-icon").addEventListener("click", function(e){
-        e.preventDefault();
-        var dropdown = document.getElementById("profile-dropdown");
-        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-    });
-
-    // Close dropdown when clicking outside
-    window.addEventListener("click", function(e){
-        if (!e.target.matches('#profile-icon, #profile-icon *')) {
+        document.getElementById("profile-icon").addEventListener("click", function(e) {
+            e.preventDefault();
             var dropdown = document.getElementById("profile-dropdown");
-            if (dropdown) dropdown.style.display = "none";
-        }
-    });
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener("click", function(e) {
+            if (!e.target.matches('#profile-icon, #profile-icon *')) {
+                var dropdown = document.getElementById("profile-dropdown");
+                if (dropdown) dropdown.style.display = "none";
+            }
+        });
     </script>
 
-    
+    <script>
+        document.querySelectorAll('.add-to-cart-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var productId = this.getAttribute('data-product-id');
+                fetch('ajax/add_to_cart.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'product_id=' + encodeURIComponent(productId)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update cart badge
+                            let badge = document.querySelector('.cart-badge');
+                            if (!badge) {
+                                badge = document.createElement('span');
+                                badge.className = 'cart-badge';
+                                document.querySelector('.fa-shopping-cart').parentNode.appendChild(badge);
+                            }
+                            badge.textContent = data.cart_count;
+                            alert('Added to cart!');
+                        } else {
+                            alert('Failed to add to cart: ' + data.message);
+                        }
+                    });
+            });
+        });
+    </script>
+
+
 
 </body>
-</html> 
+<?php if (isset($_GET['logout'])): ?>
+    <script>
+        window.onload = function() {
+            alert('You have logged out successfully.');
+        }
+    </script>
+<?php endif; ?>
+
+</html>

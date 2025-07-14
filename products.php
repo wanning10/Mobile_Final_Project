@@ -55,9 +55,9 @@ if ($categoryId) {
             <div class="nav-right-icons">
                 <a href="cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
-                    <?php if(isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
-                        <span class="cart-badge"><?php echo $_SESSION['cart_count']; ?></span>
-                    <?php endif; ?>
+                    <span class="cart-badge"<?php if(empty($_SESSION['cart_count'])) echo ' style="display:none;"'; ?>>
+                        <?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?>
+                    </span>
                 </a>
                 <div class="profile-dropdown">
                     <a href="#" class="nav-link" id="profile-icon">

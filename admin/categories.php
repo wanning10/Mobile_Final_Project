@@ -27,7 +27,7 @@ if (isset($_POST['add_category'])) {
     $image = sanitizeInput($_POST['image']);
     if (!empty($name)) {
         createCategory($conn, $name, $description, $image, $icon);
-        header('Location: categories.php');
+        header('Location: categories.php?added=1');
         exit();
     }
 }
@@ -41,7 +41,7 @@ if (isset($_POST['edit_category'])) {
     $image = sanitizeInput($_POST['image']);
     if (!empty($name)) {
         updateCategory($conn, $id, $name, $description, $image, $icon);
-        header('Location: categories.php');
+        header('Location: categories.php?updated=1');
         exit();
     }
 }
@@ -50,7 +50,7 @@ if (isset($_POST['edit_category'])) {
 if (isset($_POST['delete_category'])) {
     $id = intval($_POST['category_id']);
     deleteCategory($conn, $id);
-    header('Location: categories.php');
+    header('Location: categories.php?deleted=1');
     exit();
 }
 
@@ -217,7 +217,7 @@ if (isset($_GET['edit'])) {
                                 <td><?php echo htmlspecialchars($category['name']); ?></td>
                                 <td><?php echo htmlspecialchars($category['description']); ?></td>
                                 <td><i class="<?php echo htmlspecialchars($category['icon']); ?>"></i> <?php echo htmlspecialchars($category['icon']); ?></td>
-                                <td><?php if ($category['image']): ?><img src="<?php echo htmlspecialchars($category['image']); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/><?php endif; ?></td>
+                                <td><?php if ($category['image']): ?><img src="/<?php echo ltrim(htmlspecialchars($category['image']), '/'); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/><?php endif; ?></td>
                                 <td>
                                     <a href="categories.php?edit=<?php echo $category['id']; ?>" class="btn btn-small"><i class="fas fa-edit"></i></a>
                                     <form method="post" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
@@ -338,4 +338,25 @@ if (isset($_GET['edit'])) {
     });
     </script>
 </body>
+<?php if (isset($_GET['added'])): ?>
+<script>
+window.onload = function() {
+    alert('Category has been successfully added.');
+}
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['updated'])): ?>
+<script>
+window.onload = function() {
+    alert('Category has been successfully updated.');
+}
+</script>
+<?php endif; ?>
+<?php if (isset($_GET['deleted'])): ?>
+<script>
+window.onload = function() {
+    alert('Category has been successfully deleted.');
+}
+</script>
+<?php endif; ?>
 </html>

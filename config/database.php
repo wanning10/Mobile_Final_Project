@@ -1,7 +1,7 @@
 <?php
 // Database configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'cozy_beverage_db');
+define('DB_NAME', 'catfe');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
@@ -125,7 +125,17 @@ class Database {
                 price DECIMAL(10,2) NOT NULL,
                 FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
                 FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
-            )"
+            )",
+
+            "contact_messages" => "CREATE TABLE IF NOT EXISTS contact_messages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                first_name VARCHAR(100) NOT NULL,
+                last_name VARCHAR(100) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )",
+            
         ];
         
         foreach ($tables as $sql) {

@@ -500,4 +500,14 @@ function updateCartCount($conn, $userId) {
         $_SESSION['cart_count'] = 0;
     }
 }
+
+function getRandomProducts($conn, $limit = 6) {
+    try {
+        $stmt = $conn->query("SELECT * FROM products ORDER BY RAND() LIMIT " . intval($limit));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        return [];
+    }
+}
 ?> 
