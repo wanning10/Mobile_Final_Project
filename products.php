@@ -14,10 +14,15 @@ $search = isset($_GET['search']) ? sanitizeInput($_GET['search']) : null;
 // Get categories for filter
 $categories = getCategories($conn);
 
-// Get products based on filters
+// Get products based on filters    
 $products = getProducts($conn, $categoryId, $search);
 
-// Get current category info
+// Only show available products
+$products = array_filter($products, function($product) {
+    return isset($product['is_available']) && $product['is_available'] == 1;
+});
+
+// Get current category info 
 $currentCategory = null;
 if ($categoryId) {
     $currentCategory = getCategoryById($conn, $categoryId);

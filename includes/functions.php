@@ -440,6 +440,40 @@ function getOrderItems($conn, $orderId) {
     }
 }
 
+// Update order status
+function updateOrderStatus($conn, $orderId, $status) {
+    try {
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        return $stmt->execute([$status, $orderId]);
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+// Deduct product stock after order
+function deductProductStock($conn, $orderId) {
+    try {
+        $orderItems = getOrderItems($conn, $orderId);
+        foreach ($orderItems as $item) {
+            // Deduct stock
+            $stmt = $conn->prepare("UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?");
+            $stmt->execute([$item['quantity'], $item['product_id'], $item['quantity']]);
+
+            // Check if stock is now 0, then set is_available = 0
+            $checkStmt = $conn->prepare("SELECT stock_quantity FROM products WHERE id = ?");
+            $checkStmt->execute([$item['product_id']]);
+            $stock = $checkStmt->fetchColumn();
+            if ($stock !== false && $stock == 0) {
+                $updateAvailableStmt = $conn->prepare("UPDATE products SET is_available = 0 WHERE id = ?");
+                $updateAvailableStmt->execute([$item['product_id']]);
+            }
+        }
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
 // Admin Functions
 function getAllUsers($conn) {
     try {
@@ -510,7 +544,7 @@ function updateCartCount($conn, $userId) {
 
 function getRandomProducts($conn, $limit = 6) {
     try {
-        $stmt = $conn->query("SELECT * FROM products ORDER BY RAND() LIMIT " . intval($limit));
+        $stmt = $conn->query("SELECT * FROM products WHERE is_available = 1 AND is_featured = 1 ORDER BY RAND() LIMIT " . intval($limit));
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log($e->getMessage());
