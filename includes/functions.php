@@ -284,9 +284,10 @@ function addToCart($conn, $userId, $productId, $quantity = 1) {
 
 function getCartItems($conn, $userId) {
     try {
-        $stmt = $conn->prepare("SELECT c.*, p.name, p.price, p.image_url, p.description, p.stock_quantity
+        $stmt = $conn->prepare("SELECT c.*, p.name, p.price, p.image_url, p.description, p.stock_quantity, cat.name AS category
                                FROM cart c 
                                JOIN products p ON c.product_id = p.id 
+                               LEFT JOIN categories cat ON p.category_id = cat.id
                                WHERE c.user_id = ?");
         $stmt->execute([$userId]);
         return $stmt->fetchAll();
