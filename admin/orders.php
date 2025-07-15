@@ -67,15 +67,16 @@ $orders = getAllOrders($conn);
                     <span>CATFE</span>
                 </a>
             </div>
+            <div class="nav-menu" id="nav-menu">
             <!-- Centered menu links -->
-            <div class="nav-center-menu">
+            <!-- <div class="nav-center-menu"> -->
                 <a href="../index.php" class="nav-link">HOME</a>
                 <a href="../about.php" class="nav-link">ABOUT</a>
                 <a href="../products.php" class="nav-link">PRODUCTS</a>
                 <a href="../map.php" class="nav-link">MAP</a>
-            </div>
+            <!-- </div> -->
             <!-- Right icons (cart & profile) -->
-            <div class="nav-right-icons">
+            <!-- <div class="nav-right-icons"> -->
                 <a href="../cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
                     <?php if(isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
