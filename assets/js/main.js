@@ -201,7 +201,14 @@ function removeFromCart(productId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                updateCartDisplay(data);
+                if (data.is_empty) {
+                    // If cart is now empty, reload the page to show full empty state
+                    window.location.reload();
+                } else {
+                    // Otherwise update the display normally
+                    updateCartDisplay(data);
+                }
+                // updateCartDisplay(data);
                 showAlert('Item removed from cart', 'success');
             } else {
                 showAlert(data.message || 'Failed to remove item', 'error');
@@ -216,23 +223,53 @@ function removeFromCart(productId) {
 
 // Update Cart Display
 function updateCartDisplay(data) {
-    const cartContainer = document.getElementById('cart-items');
-    const cartTotal = document.getElementById('cart-total');
-    const cartCount = document.querySelector('.cart-badge');
+    // const cartContainer = document.getElementById('cart-items');
+    // const cartTotal = document.getElementById('cart-total');
+    // const cartCount = document.querySelector('.cart-badge');
     
+    // if (cartContainer && data.cart_html) {
+    //     cartContainer.innerHTML = data.cart_html;
+    // }
+    
+    // if (cartTotal && data.total) {
+    //     cartTotal.textContent = 'RM ' + parseFloat(data.total).toFixed(2);
+    // }
+    
+    // if (cartCount) {
+    //     cartCount.textContent = data.cart_count || 0;
+    // }
+    
+    // updateCartCount(data.cart_count);
+
+    // Update cart items
+    const cartContainer = document.getElementById('cart-items');
     if (cartContainer && data.cart_html) {
         cartContainer.innerHTML = data.cart_html;
     }
-    
-    if (cartTotal && data.total) {
-        cartTotal.textContent = '$' + parseFloat(data.total).toFixed(2);
+
+    // Update summary section
+    if (data.total !== undefined) {
+        const subtotal = parseFloat(data.total);
+        const tax = subtotal * 0.085;
+        const total = subtotal * 1.085;
+
+        // More specific selectors to avoid confusion
+        const summaryItems = document.querySelectorAll('.cart-summary .summary-item');
+        
+        if (summaryItems.length >= 3) {
+            // Subtotal (first summary-item)
+            summaryItems[0].querySelector('span:last-child').textContent = 'RM ' + subtotal.toFixed(2);
+            
+            // Tax (second summary-item)
+            summaryItems[1].querySelector('span:last-child').textContent = 'RM ' + tax.toFixed(2);
+            
+            // Total (third summary-item with total class)
+            summaryItems[2].querySelector('span:last-child').textContent = 'RM ' + total.toFixed(2);
+        }
     }
-    
-    if (cartCount) {
-        cartCount.textContent = data.cart_count || 0;
-    }
-    
-    updateCartCount(data.cart_count);
+
+    // Update cart count
+    updateCartCount(data.cart_count || 0);
 }
 
 // Update Cart Count

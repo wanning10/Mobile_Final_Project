@@ -35,45 +35,98 @@ if (removeFromCart($conn, $_SESSION['user_id'], $productId)) {
     updateCartCount($conn, $_SESSION['user_id']);
     
     // Generate cart HTML
-    $cartHtml = '';
-    foreach ($cartItems as $item) {
-        $cartHtml .= '
-            <div class="cart-item" data-product-id="' . $item['product_id'] . '">
-                <div class="cart-item-image">
-                    <img src="' . htmlspecialchars($item['image_url']) . '" 
-                         alt="' . htmlspecialchars($item['name']) . '">
+    // $cartHtml = '';
+    // foreach ($cartItems as $item) {
+    //     $cartHtml .= '
+    //         <div class="cart-item" data-product-id="' . $item['product_id'] . '">
+    //             <div class="cart-item-info">
+    //                 <img src="' . htmlspecialchars($item['image_url']) . '" 
+    //                     alt="' . htmlspecialchars($item['name']) . '">
+    //                 <div>
+    //                     <h3>' . htmlspecialchars($item['name']) . '</h3>
+    //                     <p class="product-category">' . htmlspecialchars($item['category'] ?? 'Bakery') . '</p>
+    //                 </div>
+    //             </div>
+    //             <div class="cart-item-price">RM ' . number_format($item['price'], 2) . '</div>
+    //             <div class="quantity-controls">
+    //                 <button class="quantity-btn minus" data-product-id="' . $item['product_id'] . '">-</button>
+    //                 <input type="number" 
+    //                     class="cart-quantity" 
+    //                     data-product-id="' . $item['product_id'] . '"
+    //                     value="' . $item['quantity'] . '" 
+    //                     min="1" max="99">
+    //                 <button class="quantity-btn plus" data-product-id="' . $item['product_id'] . '">+</button>
+    //             </div>
+    //             <div class="cart-item-total">
+    //                 RM ' . number_format($item['price'] * $item['quantity'], 2) . '
+    //                 <button class="remove-from-cart" data-product-id="' . $item['product_id'] . '">
+    //                     <i class="fas fa-trash"></i>
+    //                 </button>
+    //             </div>
+    //         </div>';
+    // }
+
+    if (empty($cartItems)) {
+        $cartHtml = '
+        <div class="empty-cart-container">
+            <div class="empty-cart-content">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
                 </div>
-                <div class="cart-item-details">
-                    <h3>' . htmlspecialchars($item['name']) . '</h3>
-                    <p class="cart-item-description">' . htmlspecialchars($item['description']) . '</p>
-                    <div class="cart-item-price">$' . number_format($item['price'], 2) . ' each</div>
-                </div>
-                <div class="cart-item-actions">
+                <h2 class="empty-cart-title">Your Cart is Empty</h2>
+                <p class="empty-cart-message">Looks like you haven\'t added any items yet</p>
+                <a href="products.php" class="btn btn-primary empty-cart-button">
+                    <i class="fas fa-utensils"></i> Browse Menu
+                </a>
+            </div>
+        </div>';
+    }
+    else {
+        $cartHtml = '
+        <div class="cart-header">
+            <div>Product</div>
+            <div>Price</div>
+            <div>Quantity</div>
+            <div>Total</div>
+        </div>';
+
+        foreach ($cartItems as $item) {
+            $cartHtml .= '
+                <div class="cart-item" data-product-id="' . $item['product_id'] . '">
+                    <div class="cart-item-info">
+                        <img src="' . htmlspecialchars($item['image_url']) . '" 
+                            alt="' . htmlspecialchars($item['name']) . '">
+                        <div>
+                            <h3>' . htmlspecialchars($item['name']) . '</h3>
+                            <p class="product-category">' . htmlspecialchars($item['category'] ?? 'Bakery') . '</p>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">RM ' . number_format($item['price'], 2) . '</div>
                     <div class="quantity-controls">
-                        <label for="quantity-' . $item['product_id'] . '">Quantity:</label>
+                        <button class="quantity-btn minus" data-product-id="' . $item['product_id'] . '">-</button>
                         <input type="number" 
-                               id="quantity-' . $item['product_id'] . '" 
-                               class="cart-quantity" 
-                               data-product-id="' . $item['product_id'] . '"
-                               value="' . $item['quantity'] . '" 
-                               min="1" max="99">
+                            class="cart-quantity" 
+                            data-product-id="' . $item['product_id'] . '"
+                            value="' . $item['quantity'] . '" 
+                            min="1" max="99">
+                        <button class="quantity-btn plus" data-product-id="' . $item['product_id'] . '">+</button>
                     </div>
                     <div class="cart-item-total">
-                        Total: $' . number_format($item['price'] * $item['quantity'], 2) . '
+                        RM ' . number_format($item['price'] * $item['quantity'], 2) . '
+                        <button class="remove-from-cart" data-product-id="' . $item['product_id'] . '">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
-                    <button class="btn btn-secondary remove-from-cart" 
-                            data-product-id="' . $item['product_id'] . '">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                </div>
-            </div>';
+                </div>';
+        }
     }
-    
+        
     echo json_encode([
         'success' => true,
         'message' => 'Item removed from cart',
         'cart_html' => $cartHtml,
         'total' => $cartTotal,
+        'is_empty' => empty($cartItems), 
         'cart_count' => $_SESSION['cart_count']
     ]);
 } else {

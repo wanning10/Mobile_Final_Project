@@ -226,7 +226,7 @@ updateCartCount($conn, $_SESSION['user_id']);
                 <!-- Cart container left-right -->
                 <div class="cart-container">
                     <!-- Left: Cart Items -->
-                    <div class="cart-items-container">
+                    <div class="cart-items-container" id="cart-items">
                         <!-- Cart Header -->
                         <div class="cart-header">
                             <div>Product</div>
@@ -343,6 +343,17 @@ updateCartCount($conn, $_SESSION['user_id']);
             if (!e.target.matches('#profile-icon, #profile-icon *')) {
                 var dropdown = document.getElementById("profile-dropdown");
                 if (dropdown) dropdown.style.display = "none";
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-from-cart')) {
+                const productId = e.target.closest('.remove-from-cart').dataset.productId;
+                if (confirm('Are you sure you want to remove this item from your cart?')) {
+                    removeFromCart(productId);
+                }
+                // removeFromCart(productId);
             }
         });
     </script>
