@@ -252,6 +252,7 @@ updateCartCount($conn, $_SESSION['user_id']);
                                     <input type="number" 
                                         class="cart-quantity" 
                                         data-product-id="<?php echo $item['product_id']; ?>"
+                                        data-stock="<?= $item['stock_quantity']; ?>" 
                                         value="<?php echo $item['quantity']; ?>" 
                                         min="1" max="99">
                                     <button class="quantity-btn plus" data-product-id="<?php echo $item['product_id']; ?>">+</button>
@@ -356,6 +357,69 @@ updateCartCount($conn, $_SESSION['user_id']);
                 // removeFromCart(productId);
             }
         });
+    </script>
+    <script>
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('plus') || e.target.classList.contains('minus')) {
+                const isPlus = e.target.classList.contains('plus');
+                const productId = parseInt(e.target.dataset.productId);
+                const input = document.querySelector(`input.cart-quantity[data-product-id="${productId}"]`);
+                if (!input) return;
+
+                let quantity = parseInt(input.value);
+                if (isNaN(quantity)) quantity = 1;
+
+                const stock = parseInt(input.dataset.stock); // <-- Get stock limit
+
+                if (!isPlus && quantity === 1) {
+                    const confirmRemove = confirm('Are you sure you want to remove this item from your cart?');
+                    if (confirmRemove) {
+                        removeFromCart(productId);
+                    }
+                    return;
+                }
+
+                if (isPlus) {
+                    if (quantity >= stock) {
+                        alert('You have reached the maximum available stock for this item.');
+                        return;
+                    }
+                    quantity++;
+                } else {
+                    quantity--;
+                }
+
+                input.value = quantity;
+                updateCartQuantity(productId, quantity);
+            }
+        });
+
+        document.addEventListener('change', function (e) {
+            if (e.target.classList.contains('cart-quantity')) {
+                const productId = parseInt(e.target.dataset.productId);
+                let quantity = parseInt(e.target.value);
+                const stock = parseInt(e.target.dataset.stock);
+
+                if (isNaN(quantity)) quantity = 1;
+                if (quantity > stock) {
+                    alert('Quantity exceeds available stock. Adjusting to maximum allowed.');
+                    quantity = stock;
+                }
+
+                if (quantity === 0) {
+                    const confirmDelete = confirm('Are you sure you want to remove this item from your cart?');
+                    if (confirmDelete) {
+                        removeFromCart(productId);
+                    } else {
+                        quantity = 1;
+                    }
+                }
+
+                e.target.value = quantity;
+                updateCartQuantity(productId, quantity);
+            }
+        });
+
     </script>
 
     <script src="assets/js/main.js"></script>

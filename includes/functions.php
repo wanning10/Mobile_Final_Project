@@ -284,7 +284,7 @@ function addToCart($conn, $userId, $productId, $quantity = 1) {
 
 function getCartItems($conn, $userId) {
     try {
-        $stmt = $conn->prepare("SELECT c.*, p.name, p.price, p.image_url, p.description 
+        $stmt = $conn->prepare("SELECT c.*, p.name, p.price, p.image_url, p.description, p.stock_quantity
                                FROM cart c 
                                JOIN products p ON c.product_id = p.id 
                                WHERE c.user_id = ?");
