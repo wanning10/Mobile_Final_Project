@@ -33,52 +33,59 @@ $featuredProducts = getRandomProducts($conn, 6);
                     <span>CATFE</span>
                 </a>
             </div>
-
+            <div class="nav-menu" id="nav-menu">
             <!-- Centered menu links -->
-            <div class="nav-center-menu">
+            <!-- <div class="nav-center-menu"> -->
                 <a href="index.php" class="nav-link active">HOME</a>
                 <a href="about.php" class="nav-link">ABOUT</a>
                 <a href="products.php" class="nav-link">PRODUCTS</a>
                 <a href="map.php" class="nav-link">MAP</a>
-            </div>
+            <!-- </div> -->
 
             <!-- Right icons (cart & profile) -->
-            <div class="nav-right-icons">
+            <!-- <div class="nav-right-icons"> -->
                 <a href="cart.php" class="nav-link">
                     <i class="fas fa-shopping-cart"></i>
                     <?php if (isset($_SESSION['cart_count']) && $_SESSION['cart_count'] > 0): ?>
                         <span class="cart-badge"><?php echo $_SESSION['cart_count']; ?></span>
                     <?php endif; ?>
                 </a>
-                <div class="profile-dropdown">
-                    <a href="#" class="nav-link" id="profile-icon">
-                        <i class="fas fa-user"></i>
-                    </a>
-                    <div class="dropdown-content" id="profile-dropdown">
-                        <a href="profile.php">My Profile</a>
-                        <a href="logout.php">Logout</a>
-                    </div>
-                </div>
-                <?php if ($isAdmin): ?>
-                    <!-- <a href="../admin/index.php" class="nav-link">ADMIN</a> -->
-                    <!-- Admin Dropdown -->
-                    <div class="admin-dropdown">
-                        <!-- <a href="index.php" class="admin-toggle nav-link active">
-                            <span>ADMIN</span>
-                        </a> -->
-                        <button class="admin-toggle nav-link" href="#">
-                            <!-- <i class="fas fa-user-cog"></i> -->
-                            <span>ADMIN</span>
-                        </button>
-                        <div class="admin-dropdown-menu">
-                            <a href="admin/index.php">Dashboard</a>
-                            <a href="admin/products.php">Manage Products</a>
-                            <a href="admin/categories.php">Manage Categories</a>
-                            <a href="admin/users.php">Manage Users</a>
-                            <a href="admin/orders.php">Manage Orders</a>
+                <?php if ($isLoggedIn): ?>
+                    <div class="profile-dropdown">
+                        <a href="#" class="nav-link" id="profile-icon">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <div class="dropdown-content" id="profile-dropdown">
+                            <a href="profile.php">My Profile</a>
+                            <a href="logout.php">Logout</a>
                         </div>
                     </div>
+                    <?php if ($isAdmin): ?>
+                        <!-- <a href="../admin/index.php" class="nav-link">ADMIN</a> -->
+                        <!-- Admin Dropdown -->
+                        <div class="admin-dropdown">
+                            <!-- <a href="index.php" class="admin-toggle nav-link active">
+                                <span>ADMIN</span>
+                            </a> -->
+                            <button class="admin-toggle nav-link" href="#">
+                                <!-- <i class="fas fa-user-cog"></i> -->
+                                <span>ADMIN</span>
+                            </button>
+                            <div class="admin-dropdown-menu">
+                                <a href="admin/index.php">Dashboard</a>
+                                <a href="admin/products.php">Manage Products</a>
+                                <a href="admin/categories.php">Manage Categories</a>
+                                <a href="admin/users.php">Manage Users</a>
+                                <a href="admin/orders.php">Manage Orders</a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <a href="login.php" class="nav-link">
+                        LOGIN
+                    </a>
                 <?php endif; ?>
+            <!-- </div> -->
             </div>
 
             <div class="nav-toggle" id="nav-toggle">
