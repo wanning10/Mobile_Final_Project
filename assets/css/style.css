@@ -648,7 +648,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 .btn-outline {
     background: transparent;
     color: #8B4513;
-    border: 2px solid #8B4513;
+    border: solid #8B4513;
 }
 
 .btn-outline:hover {

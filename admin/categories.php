@@ -218,7 +218,16 @@ if (isset($_GET['edit'])) {
                                 <td><?php echo htmlspecialchars($category['name']); ?></td>
                                 <td><?php echo htmlspecialchars($category['description']); ?></td>
                                 <td><i class="<?php echo htmlspecialchars($category['icon']); ?>"></i> <?php echo htmlspecialchars($category['icon']); ?></td>
-                                <td><?php if ($category['image']): ?><img src="/<?php echo ltrim(htmlspecialchars($category['image']), '/'); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/><?php endif; ?></td>
+                                <!-- <td><?php if ($category['image']): ?><img src="/<?php echo ltrim(htmlspecialchars($category['image']), '/'); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/><?php endif; ?></td> -->
+                                <td>
+                                    <?php if (!empty($category['image'])): ?>
+                                        <img src="../<?php echo htmlspecialchars($category['image']); ?>" 
+                                            alt="<?php echo htmlspecialchars($category['name']); ?>"
+                                            style="height:30px;max-width:60px;object-fit:cover;">
+                                    <?php else: ?>
+                                        <span>No image</span>
+                                    <?php endif; ?>
+                                </td>
                                 <td>
                                     <a href="categories.php?edit=<?php echo $category['id']; ?>" class="btn btn-small"><i class="fas fa-edit"></i></a>
                                     <form method="post" action="" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">

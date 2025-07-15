@@ -217,8 +217,15 @@ $products = getProducts($conn);
                                 <td><?php echo $product['is_available'] ? 'Yes' : 'No'; ?></td>
                                 <td><?php echo $product['is_featured'] ? 'Yes' : 'No'; ?></td>
                                 <td>
-                                    <?php if ($product['image_url']): ?>
+                                    <!-- <?php if ($product['image_url']): ?>
                                         <img src="/<?php echo ltrim(htmlspecialchars($product['image_url']), '/'); ?>" alt="Image" style="height:30px;max-width:60px;object-fit:cover;"/>
+                                    <?php endif; ?> -->
+                                    <?php if (!empty($product['image_url'])): ?>
+                                        <img src="../<?php echo htmlspecialchars($product['image_url']); ?>" 
+                                            alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                            style="height:30px;max-width:60px;object-fit:cover;">
+                                    <?php else: ?>
+                                        <span>No image</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="description-cell" title="<?php echo htmlspecialchars($product['description']); ?>" style="max-width:200px; overflow-x:auto;">
