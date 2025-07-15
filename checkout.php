@@ -59,6 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $orderId = createOrder($conn, $_SESSION['user_id'], $totalAmount, $shippingAddress, $phone, $paymentMethod);
         
         if ($orderId) {
+            // Set order status to confirmed
+            updateOrderStatus($conn, $orderId, 'confirmed');
+            // Deduct product stock
+            deductProductStock($conn, $orderId);
             // Redirect to order confirmation
             header("Location: order_confirmation.php?order_id=$orderId");
             exit();
