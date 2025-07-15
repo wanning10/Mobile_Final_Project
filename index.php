@@ -7,6 +7,7 @@ require_once 'includes/functions.php';
 $isLoggedIn = isset($_SESSION['user_id']);
 $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
 
+$categories = getCategories($conn);
 
 $featuredProducts = getRandomProducts($conn, 6);
 ?>
@@ -112,7 +113,7 @@ $featuredProducts = getRandomProducts($conn, 6);
     </section>
 
     <!-- Featured Categories (Static Version) -->
-    <section class="featured-categories">
+    <!-- <section class="featured-categories">
         <div class="container">
             <h2>Our Categories</h2>
             <p class="section-subtitle">A variety of cozy selections made just for you</p>
@@ -148,101 +149,29 @@ $featuredProducts = getRandomProducts($conn, 6);
                 </a>
             </div>
         </div>
-    </section>
-
-    <!-- Featured Products (Static) -->
-    <!-- <section class="featured-products">
-        <div class="container">
-            <h2>Featured Products</h2>
-            <p class="section-subtitle">A variety of cozy selections made just for you</p>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/images/products/coffee/cappucino.png" alt="Cappucino">
-                    </div>
-                    <div class="product-info">
-                        <h3>Cappucino</h3>
-                        <p class="product-description">Dark, rich espresso lies in wait under a smoothed and stretched layer of thick milk foam. An alchemy of barista artistry and craft.</p>
-                        <div class="product-price">RM 13.50</div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/images/products/tea/iced-matcha-latte.png" alt="Green Tea">
-                    </div>
-                    <div class="product-info">
-                        <h3>Iced Matcha Latte</h3>
-                        <p class="product-description">Smooth and creamy, this vibrant green tea latte is handcrafted with our new unsweetened matcha, milk, and classic syrup and served with ice.</p>
-                        <div class="product-price">RM 18.90</div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/images/products/tea/iced-blacktea-lemonade.png" alt="Mocha">
-                    </div>
-                    <div class="product-info">
-                        <h3>Iced Black Tea Lemonade</h3>
-                        <p class="product-description">Smooth, refreshing Mighty Leaf Summer Solstice iced tea layered with tart and sweet lemonade.</p>
-                        <div class="product-price">RM 14.50</div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/images/products/frappe/caramel-frappe.png" alt="Blueberry Muffin">
-                    </div>
-                    <div class="product-info">
-                        <h3>Caramel Frappé</h3>
-                        <p class="product-description">Rich caramel adds some indulgence to our double-strength Baridi Blend cold brew. We top this coffee-forward whipped refreshment with whipped cream and a drizzle of caramel sauce.</p>
-                        <div class="product-price">RM 12.50</div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/images/products/juice/strawberry-lemonade.png" alt="Iced Latte">
-                    </div>
-                    <div class="product-info">
-                        <h3>Strawberry Açaí Lemonade Refresher</h3>
-                        <p class="product-description">Sweet strawberry, passionfruit, and açaí flavors balanced with the delightful zing of lemonade, served over ice with freeze-dried strawberry pieces.</p>
-                        <div class="product-price">RM 9.50</div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="assets/images/products/pastries/chocolate-croissant.png" alt="Cheesecake">
-                    </div>
-                    <div class="product-info">
-                        <h3>Chocolate Croissant</h3>
-                        <p class="product-description">Two generous pieces of chocolate wrapped in a butter croissant with soft, flaky layers and a golden-brown crust.</p>
-                        <div class="product-price">RM 12.00</div>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section> -->
 
+    <!-- Featured Categories (Dynamic Version) -->
+    <section class="featured-categories">
+        <div class="container">
+            <h2>Our Categories</h2>
+            <p class="section-subtitle">A variety of cozy selections made just for you</p>
+            <div class="categories-grid">
+                <?php foreach ($categories as $category): ?>
+                    <a href="products.php?category=<?= $category['id'] ?>" class="category-card">
+                        <img 
+                            src="<?= htmlspecialchars($category['image']) ?>" 
+                            alt="<?= htmlspecialchars($category['name']) ?>" 
+                            class="category-image"
+                            onerror="this.src='assets/images/categories/default.png';"
+                        >
+                        <h3><?= htmlspecialchars($category['name']) ?></h3>
+                        <p><?= htmlspecialchars($category['description']) ?></p>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
 
     <!-- Featured Products (Dynamic) -->
     <section class="featured-products">
