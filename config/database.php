@@ -13,7 +13,10 @@ class Database {
         try {
             // First try to connect without specifying database
             $this->conn = new PDO(
-                "mysql:host=".DB_HOST, 
+                // "mysql:host=".DB_HOST,
+                // "mysql:host=".DB_HOST.";port=3307",  
+                // "mysql:host=localhost;port=3308",
+                "mysql:host=localhost;port=3307",
                 DB_USER, 
                 DB_PASS,
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]

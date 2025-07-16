@@ -250,6 +250,7 @@ updateCartCount($conn, $_SESSION['user_id']);
                 <!-- Cart container left-right -->
                 <div class="cart-container">
                     <!-- Left: Cart Items -->
+                    <div class="cart-items-scroll-wrapper">
                     <div class="cart-items-container" id="cart-items">
                         <!-- Cart Header -->
                         <div class="cart-header">
@@ -262,6 +263,7 @@ updateCartCount($conn, $_SESSION['user_id']);
                         <?php foreach($cartItems as $item): ?>
                             <!-- Cart Item -->
                             <div class="cart-item" data-product-id="<?php echo $item['product_id']; ?>">
+                                <!-- Image on left -->
                                 <div class="cart-item-info">
                                     <img src="<?php echo htmlspecialchars($item['image_url']); ?>" 
                                         alt="<?php echo htmlspecialchars($item['name']); ?>">
@@ -289,6 +291,7 @@ updateCartCount($conn, $_SESSION['user_id']);
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                    </div>
                     </div>
 
                     <!-- Right: Cart Summary -->
@@ -333,7 +336,8 @@ updateCartCount($conn, $_SESSION['user_id']);
                     <p>Sip, unwind, and enjoy the gentle company of cats.
                         Catfe brings comfort, quality coffee, and calm all in one cozy space.</p>
                 </div>
-                <div class="footer-section" style="padding-left: 5em;">
+                <!-- <div class="footer-section" style="padding-left: 5em;"> -->
+                <div class="footer-section quick-links">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.php">Home</a></li>

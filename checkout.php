@@ -344,7 +344,8 @@ $user = getUserById($conn, $_SESSION['user_id']);
                     <p>Sip, unwind, and enjoy the gentle company of cats.
                         Catfe brings comfort, quality coffee, and calm all in one cozy space.</p>
                 </div>
-                <div class="footer-section" style="padding-left: 5em;">
+                <!-- <div class="footer-section" style="padding-left: 5em;"> -->
+                <div class="footer-section quick-links">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.php">Home</a></li>

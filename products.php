@@ -118,7 +118,7 @@ if ($categoryId) {
     </section> -->
 
     <!-- Hero Section Products Top Banner -->
-    <section class="hero-section" style="position: relative; overflow: hidden;">
+    <!-- <section class="hero-section" style="position: relative; overflow: hidden;">
         <img src="assets/images/coffee-product-new.jpg" alt="Hero Image" style="width: 100%; height: auto; object-fit: cover;">
         <div class="hero-overlay" style="
             position: absolute;
@@ -136,7 +136,15 @@ if ($categoryId) {
             <h1 style="font-size: 3rem; margin-bottom: 1rem;">All Products</h1>
             <p style="font-size: 1.2rem;">Behind every brew is a dedication to quality and a love for sharing warmth.</p>
         </div>
+    </section> -->
+    <section class="hero-section">
+        <img src="assets/images/coffee-product-new.jpg" alt="Hero Image">
+        <div class="hero-overlay-banner">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">All Products</h1>
+            <p style="font-size: 1.2rem;">Behind every brew is a dedication to quality and a love for sharing warmth.</p>
+        </div>
     </section>
+
 
     <!-- search bar -->
     <!-- <div class="product-search-container">
@@ -290,7 +298,8 @@ if ($categoryId) {
                     <p>Sip, unwind, and enjoy the gentle company of cats.
                         Catfe brings comfort, quality coffee, and calm all in one cozy space.</p>
                 </div>
-                <div class="footer-section" style="padding-left: 5em;">
+                <!-- <div class="footer-section" style="padding-left: 5em;"> -->
+                <div class="footer-section quick-links">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.php">Home</a></li>
