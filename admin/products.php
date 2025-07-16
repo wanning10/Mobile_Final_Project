@@ -142,7 +142,7 @@ $products = getProducts($conn);
                     <form method="post" action="" style="overflow-y:auto; max-height:60vh;">
                         <div class="form-group">
                             <label for="name" style="color: #333;">Name</label>
-                            <input type="text" name="name" id="name" required>
+                            <input type="text" name="name" id="name" required pattern="[A-Za-z\s]+" title="Name must contain only letters and spaces">
                         </div>
                         <div class="form-group">
                             <label for="category_id" style="color: #333;">Category</label>
@@ -267,7 +267,7 @@ $products = getProducts($conn);
                         <input type="hidden" name="product_id" id="edit_product_id">
                         <div class="form-group">
                             <label style="color: #333;">Name</label>
-                            <input type="text" name="name" id="edit_name" required>
+                            <input type="text" name="name" id="edit_name" required pattern="[A-Za-z\s]+" title="Name must contain only letters and spaces">
                         </div>
                         <div class="form-group">
                             <label style="color: #333;">Category</label>

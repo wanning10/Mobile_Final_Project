@@ -143,7 +143,7 @@ if (isset($_GET['edit'])) {
                     <form method="post" action="" style="overflow-y:auto; max-height:60vh;">
                         <div class="form-group">
                             <label for="name" style="color: #333;">Name</label>
-                            <input type="text" name="name" id="name" required>
+                            <input type="text" name="name" id="name" required pattern="[A-Za-z\s]+" title="Name must contain only letters and spaces">
                         </div>
                         <div class="form-group">
                             <label for="description" style="color: #333;">Description</label>
