@@ -171,7 +171,7 @@ $user = getUserById($conn, $_SESSION['user_id']);
             <form method="POST" action="checkout.php" id="checkout-form">
                 <div class="checkout-container">
                     <div class="checkout-form">
-                        <h3>Shipping Information</h3>
+                        <h3>Delivery Information</h3>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="name">Full Name *</label>
