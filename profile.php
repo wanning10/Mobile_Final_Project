@@ -50,8 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_profile'])) {
     $editType = $_POST['edit_type'] ?? '';
     if ($editType === 'username') {
         $username = sanitizeInput($_POST['username']);
+
         if (empty($username)) {
             $error = 'Username is required';
+        } elseif (strlen($username) < 3 || strlen($username) > 20) {
+            $error = 'Username must be between 3 and 20 characters long.';
+        } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            $error = 'Username can only contain letters, numbers, and underscores.';
         } else {
             if (updateUserProfile($conn, $_SESSION['user_id'], $username, $user['email'], '', '')) {
                 $success = 'Username updated successfully!';
