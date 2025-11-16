@@ -1,4 +1,4 @@
-# MobileApplicationFinalProject
+# Catfe – Food & Beverage Mobile Web App
 
 Course Code: SWE311 <br/>
 Course Name: Mobile Applications System Design <br/>
@@ -13,6 +13,23 @@ Group Members:
 4. SWE2209115 Wai Pui Shan
 5. SWE2209116 Wong Wan Ning
 
+## Features
+
+- User registration and login
+- Browse products by category (coffee, tea, juices, pastries, etc.)
+- Product search and detailed product cards
+- Shopping cart and checkout with delivery information & payment details
+- Embedded video and audio on the home page for branding and ambience
+- Store locator with interactive map and route to physical outlets
+- Profile page with editable user information & order history
+- Admin panel to manage products, categories, users, and orders
+
+## Tech Stack
+
+- Mobile web app using standard web technologies (HTML, CSS, JavaScript)
+- Backend with database support for full CRUD operations
+
+## Getting Started
 ### Step 1: Download and Setup
 1. Download or clone this project to your XAMPP `htdocs` folder
 2. Start XAMPP Control Panel
